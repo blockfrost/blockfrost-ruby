@@ -21,7 +21,12 @@ module Blockfrostruby
   class Request
     def self.get_response(url, _params = {}, _headers = nil)
       # params = { :limit => 10, :page => 3, :order => 'desc' }
-      response = Net::HTTP.get_response(URI(url))
+      # response = Net::HTTP.get_response(URI(url))
+      uri = URI(url)
+      req = Net::HTTP::Get.new(URI(url))
+      req['project_id'] = "" # || _headers[:project_id]
+      response = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') {|http|  http.request(req)}
+      
       body = response.header.content_type == 'application/json' ? JSON.parse(response.body) : response.body
       { status: response.code, body: body }
     end
