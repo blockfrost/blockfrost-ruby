@@ -40,6 +40,7 @@ module Blockfrostruby
     def self.format_response(response)
       body = response.header.content_type == 'application/json' ? JSON.parse(response.body) : response.body
       { status: response.code, body: body }
+      # In config return whole object, default this one
     end
   end
 
@@ -47,8 +48,17 @@ module Blockfrostruby
     CARDANO_MAINNET_URL = "https://cardano-mainnet.blockfrost.io/api/v0" # To config
     # Needs to share methods with CardanoTestNet class, the same requests. Use Fabriq with same classes
 
+    # Should be grouped by endpoints
+    def self.get_root
+      Request.get_response("#{CARDANO_MAINNET_URL}/")
+    end
+
     def self.get_health
       Request.get_response("#{CARDANO_MAINNET_URL}/health")
+    end
+
+    def self.get_health_clock
+      Request.get_response("#{CARDANO_MAINNET_URL}/health/clock")
     end
 
     def self.get_custom_url
