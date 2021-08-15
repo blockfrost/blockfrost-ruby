@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Blockfrostruby do
   it 'has a version number' do
     expect(Blockfrostruby::VERSION).not_to be nil

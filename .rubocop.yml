@@ -13,18 +13,12 @@ Layout/LineLength:
 Metrics/MethodLength:
   Max: 30
 
-Metrics/AbcSize:
-  Max: 20
-
 # Documentation
 
 Style/Documentation:
   Enabled: false
 
 # Style
-
-Style/FrozenStringLiteralComment:
-  Enabled: false
 
 Style/HashSyntax:
   EnforcedStyle: ruby19_no_mixed_keys
