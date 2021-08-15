@@ -10,7 +10,6 @@ require 'json'
 module Blockfrostruby
   # Net::HTTP.get(uri).encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
   # https://dog.ceo/api/breeds/list/all
-  # Format = status body
 
   # Should be separate module with only verbs action
   # puts res.body if res.is_a?(Net::HTTPSuccess)
@@ -22,7 +21,6 @@ module Blockfrostruby
     def self.get_response(url, _params = {}, _headers = nil)
       # params = { :limit => 10, :page => 3, :order => 'desc' }
       # response = Net::HTTP.get_response(URI(url))
-      uri = URI(url)
       req = Net::HTTP::Get.new(URI(url))
       req['project_id'] = "" # || _headers[:project_id]
       response = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') {|http|  http.request(req)}
@@ -47,6 +45,10 @@ module Blockfrostruby
 
     def self.get_health
       Request.get_response(CARDANO_MAINNET_URL + "health")
+    end
+
+    def self.get_custom_url
+    # used when user wants to add something in the url manually
     end
   end
 end
