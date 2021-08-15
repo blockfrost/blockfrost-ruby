@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'lib/blockfrostruby/version'
 
 Gem::Specification.new do |spec|
@@ -9,13 +7,13 @@ Gem::Specification.new do |spec|
   spec.email         = ['ivan.papushoi@mail.ru']
 
   spec.summary       = 'Ruby SDK to work with Blockfrost (Cardano Blockchain API)'
-  spec.description   = "Blockfrost is a hosted API as a service serving the data from the Cardano blockchain.
-                        This gem is Ruby SDK for Blockfrost.io to enable developers 
-                        to use full power of this API without having to create basic functions for it.
-                        The OpenAPI documentation is hosted at https://github.com/blockfrost/openapi.
+  spec.description   = "Blockfrost is a hosted API as a service serving the data from the Cardano blockchain.\
+                        This gem is Ruby SDK for Blockfrost.io to enable developers\
+                        to use full power of this API without having to create basic functions for it.\
+                        The OpenAPI documentation is hosted at https://github.com/blockfrost/openapi.\
                         This gem is licensed under ASL 2.0."
   spec.homepage      = 'https://github.com/blockfrost/blockfrost-ruby'
-  spec.required_ruby_version = '>= 2.4.0'
+  spec.required_ruby_version = '>= 2.5.0'
 
   # spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 

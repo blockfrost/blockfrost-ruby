@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # gem build blockfrostruby
 # gem install ./blockfrostruby-0.1.0.gem
 
@@ -23,8 +21,8 @@ module Blockfrostruby
       # response = Net::HTTP.get_response(URI(url))
       req = Net::HTTP::Get.new(URI(url))
       req['project_id'] = "" # || _headers[:project_id]
-      response = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') {|http|  http.request(req)}
-      
+      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
+
       body = response.header.content_type == 'application/json' ? JSON.parse(response.body) : response.body
       { status: response.code, body: body }
     end
@@ -44,11 +42,11 @@ module Blockfrostruby
     # Needs to share methods with CardanoTestNet class, the same requests. Use Fabriq with same classes
 
     def self.get_health
-      Request.get_response(CARDANO_MAINNET_URL + "health")
+      Request.get_response("#{CARDANO_MAINNET_URL}health")
     end
 
     def self.get_custom_url
-    # used when user wants to add something in the url manually
+      # used when user wants to add something in the url manually
     end
   end
 end

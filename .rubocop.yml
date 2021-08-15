@@ -1,13 +1,20 @@
+AllCops:
+  TargetRubyVersion: 2.5
+  NewCops: enable
+
 # Metrics
 
 Metrics/BlockLength:
-  Max: 150
+  Max: 120
 
 Layout/LineLength:
-  Max: 150
+  Max: 120
 
 Metrics/MethodLength:
   Max: 30
+
+Metrics/AbcSize:
+  Max: 20
 
 # Documentation
 
@@ -24,3 +31,9 @@ Style/HashSyntax:
 
 Style/SymbolArray:
   Enabled: true
+
+Style/StringLiterals:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false

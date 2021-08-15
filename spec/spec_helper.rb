@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'blockfrostruby'
 
 RSpec.configure do |config|
