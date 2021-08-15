@@ -1,0 +1,26 @@
+# Metrics
+
+Metrics/BlockLength:
+  Max: 150
+
+Layout/LineLength:
+  Max: 150
+
+Metrics/MethodLength:
+  Max: 30
+
+# Documentation
+
+Style/Documentation:
+  Enabled: false
+
+# Style
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/HashSyntax:
+  EnforcedStyle: ruby19_no_mixed_keys
+
+Style/SymbolArray:
+  Enabled: true
