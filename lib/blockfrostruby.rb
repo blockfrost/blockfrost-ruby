@@ -61,34 +61,7 @@ module HealthEndpoints
   end
 end
 
-module Blockfrostruby
-
-  class CardanoMainNet
-    include HealthEndpoints # Array
-
-    def initialize(project_id)
-      @project_id = project_id
-      @url = CARDANO_MAINNET_URL
-    end
-
-    class << self
-      def get_custom_url
-        # used when user wants to add something in the url manually
-        # extend Request
-      end
-    end
-  end
-
-  class CardanoTestNet < CardanoMainNet
-    def initialize(project_id)
-      super
-      @url = CARDANO_TESTNET_URL
-    end
-  end
-
-  class Error < StandardError; end
-  # raise error if body status error
-
+module Config
   class Configuration
     attr_accessor :use_full_response_object, :name
     # use asc/desc order
@@ -106,7 +79,7 @@ module Blockfrostruby
   class << self
     def configure
       @configuration = Configuration.new
-      yield(@configuration) if block_given?
+      yield @configuration if block_given?
       @configuration
     end
 
@@ -114,4 +87,52 @@ module Blockfrostruby
       @configuration || configure
     end
   end
+end
+
+module Blockfrostruby
+  class CardanoMainNet
+    include HealthEndpoints # EndpointsArray
+    #include Config
+
+    attr_reader :config
+
+    def initialize(project_id, config=self.class.default_config)
+      @project_id = project_id
+      @url = CARDANO_MAINNET_URL
+      @config = self.class.define_config(config)
+    end
+
+    
+    class << self
+      def get_custom_url
+        # used when user wants to add something in the url manually
+        # extend Request
+      end
+
+      def default_config
+        {
+          use_asc_order: true
+        }
+      end
+
+      def define_config(config)
+        result = default_config
+        config.each do |key, value|
+          # rescue if result[key.to_sym].nil?
+          result[key.to_sym] = value unless result[key.to_sym].nil?
+        end
+        result
+      end
+    end
+  end
+
+  class CardanoTestNet < CardanoMainNet
+    def initialize(project_id)
+      super
+      @url = CARDANO_TESTNET_URL
+    end
+  end
+
+  class Error < StandardError; end
+  # raise error if body status error
 end
