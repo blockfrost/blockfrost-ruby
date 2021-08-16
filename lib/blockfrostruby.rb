@@ -2,6 +2,8 @@
 
 # gem build blockfrostruby
 # gem install ./blockfrostruby-0.1.0.gem
+# require 'blockfrostruby'
+# Blockfrostruby::CardanoMainNet
 
 require_relative 'blockfrostruby/version'
 require 'net/http'
@@ -21,11 +23,13 @@ module Blockfrostruby
     def self.get_response(url, _params = {}, _headers = nil)
       # params = { :limit => 10, :page => 3, :order => 'desc' }
       # response = Net::HTTP.get_response(URI(url))
-      uri = URI(url)
-      req = Net::HTTP::Get.new(uri)
-      req['project_id'] = "" # || _headers[:project_id]
-      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
-      format_response(response)
+      
+      puts url
+      # uri = URI(url)
+      # req = Net::HTTP::Get.new(uri)
+      # req['project_id'] = "" # || _headers[:project_id]
+      # response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
+      # format_response(response)
     end
 
     def self.get_all_pages(url)
@@ -45,24 +49,33 @@ module Blockfrostruby
   end
 
   class CardanoMainNet
-    CARDANO_MAINNET_URL = "https://cardano-mainnet.blockfrost.io/api/v0" # To config
-    # Needs to share methods with CardanoTestNet class, the same requests. Use Fabriq with same classes
-
     # Should be grouped by endpoints
+    def self.url
+      "https://cardano-mainnet.blockfrost.io/api/v0" #TO CONFIG
+    end
+    
     def self.get_root
-      Request.get_response("#{CARDANO_MAINNET_URL}/")
+      Request.get_response("#{self.url}/")
     end
 
     def self.get_health
-      Request.get_response("#{CARDANO_MAINNET_URL}/health")
+      Request.get_response("#{self.url}/health")
     end
 
     def self.get_health_clock
-      Request.get_response("#{CARDANO_MAINNET_URL}/health/clock")
+      Request.get_response("#{self.url}/health/clock")
     end
 
     def self.get_custom_url
       # used when user wants to add something in the url manually
     end
   end
+
+  class CardanoTestNet < CardanoMainNet
+    def self.url
+      "another url"
+    end
+  end
+
+  
 end
