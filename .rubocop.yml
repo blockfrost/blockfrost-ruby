@@ -26,8 +26,8 @@ Style/HashSyntax:
 Style/SymbolArray:
   Enabled: true
 
-Style/StringLiterals:
+Style/ClassVars: 
   Enabled: false
-
+  
 Naming/AccessorMethodName:
   Enabled: false
