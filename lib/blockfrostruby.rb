@@ -13,7 +13,8 @@ module Request
   require 'json'
 
   class << self
-    def get_response(url, project_id, _use_desc_order=false,_params = {}, _headers = nil)
+    def get_response(url, project_id, _params = {}, _headers = nil)
+      #  _use_desc_order = false
       # params = { :limit => 10, :page => 3, :order => 'desc' }
       # response = Net::HTTP.get_response(URI(url))
       uri = URI(url)
@@ -33,6 +34,10 @@ module Request
       # end
     end
 
+    def get_full_object_response
+      # Call it if it set in config
+    end
+
     private
 
     def format_response(response)
@@ -46,7 +51,7 @@ module Request
 end
 
 module HealthEndpoints
-  extend Request
+  extend Request # extend or include, why it works
 
   def get_root
     Request.get_response("#{@url}/", @project_id)
@@ -65,7 +70,7 @@ module Configuration
   class << self
     def default_config
       {
-        # return_whole_object_in_request: false,
+        return_whole_object_in_request: false,
         parallel_requests: 5,
         use_desc_order_as_default: false,
         name: '123'
@@ -90,7 +95,7 @@ module Blockfrostruby
 
     attr_reader :config
 
-    def initialize(project_id, config=Configuration.default_config)
+    def initialize(project_id, config = Configuration.default_config)
       @project_id = project_id
       @url = CARDANO_MAINNET_URL
       @config = Configuration.define_config(config)
@@ -113,17 +118,16 @@ module Blockfrostruby
   # raise error if body status error
 end
 
-
 # module Config
 #   class Configuration
 #     attr_accessor :use_full_response_object, :name
 #     # use asc/desc order
-    
+
 #     def initialize(use_full_response_object = false, name = 'test')
 #       @use_full_response_object = use_full_response_object
 #       @name = name
 #     end
-    
+
 #     def [](value)
 #       self.public_send(value)
 #     end
