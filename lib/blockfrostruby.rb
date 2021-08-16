@@ -48,24 +48,16 @@ end
 module HealthEndpoints
   extend Request
 
-  def self.set_url(value)
-    @@url = value
-  end
-
-  def self.set_project_id(value)
-    @@project_id = value
-  end
-
   def get_root
-    Request.get_response("#{@@url}/", @project_id )
+    Request.get_response("#{@url}/", @project_id )
   end
 
   def get_health
-    Request.get_response("#{@@url}/health", @project_id )
+    Request.get_response("#{@url}/health", @project_id )
   end
 
   def get_health_clock
-    Request.get_response("#{@@url}/health/clock", @project_id )
+    Request.get_response("#{@url}/health/clock", @project_id )
   end
 end
 
@@ -80,22 +72,14 @@ module Blockfrostruby
     include HealthEndpoints # Array
 
     def initialize(project_id)
-      @project_id = project_id # Can be removed
-      HealthEndpoints.set_url(CARDANO_MAINNET_URL)
-      HealthEndpoints.set_project_id(@project_id)
+      @project_id = project_id
+      @url = CARDANO_MAINNET_URL
     end
 
     class << self
       def get_custom_url
         # used when user wants to add something in the url manually
         # extend Request
-      end
-
-      private
-
-      def set_vars_for_endpoints_modules(modules)
-        # TODO: refactor and implement setter for all endpoints modules
-        # Maybe enpoints modules can be grouped in array
       end
     end
   end
@@ -104,8 +88,8 @@ module Blockfrostruby
     CARDANO_TESTNET_URL = "another_url" #To config
 
     def initialize(project_id)
-      super
-      HealthEndpoints.set_url(CARDANO_TESTNET_URL)
+      @project_id = project_id
+      @url = CARDANO_TESTNET_URL
     end
   end
 end
