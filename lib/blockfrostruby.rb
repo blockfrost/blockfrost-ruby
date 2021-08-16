@@ -6,6 +6,7 @@
 # Blockfrostruby::CardanoMainNet
 
 require_relative 'blockfrostruby/version'
+require_relative 'blockfrostruby/constants'
 
 module Request
   require 'net/http'
@@ -65,7 +66,6 @@ module Blockfrostruby
   # raise error if body status error
 
   class CardanoMainNet
-    CARDANO_MAINNET_URL = 'https://cardano-mainnet.blockfrost.io/api/v0' # To config
     include HealthEndpoints # Array
 
     def initialize(project_id)
@@ -82,11 +82,15 @@ module Blockfrostruby
   end
 
   class CardanoTestNet < CardanoMainNet
-    CARDANO_TESTNET_URL = 'another_url' # To config
-
     def initialize(project_id)
       super
       @url = CARDANO_TESTNET_URL
     end
   end
 end
+
+# module Config
+#   class Configurable
+#     attr_accessor :use_full_response_object
+#   end
+# end
