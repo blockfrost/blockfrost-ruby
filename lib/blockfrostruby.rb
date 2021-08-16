@@ -44,31 +44,28 @@ module Request
   end
 end
 
-
 module HealthEndpoints
   extend Request
 
   def get_root
-    Request.get_response("#{@url}/", @project_id )
+    Request.get_response("#{@url}/", @project_id)
   end
 
   def get_health
-    Request.get_response("#{@url}/health", @project_id )
+    Request.get_response("#{@url}/health", @project_id)
   end
 
   def get_health_clock
-    Request.get_response("#{@url}/health/clock", @project_id )
+    Request.get_response("#{@url}/health/clock", @project_id)
   end
 end
 
-
 module Blockfrostruby
-
   class Error < StandardError; end
   # raise error if body status error
 
   class CardanoMainNet
-    CARDANO_MAINNET_URL = "https://cardano-mainnet.blockfrost.io/api/v0" #To config
+    CARDANO_MAINNET_URL = 'https://cardano-mainnet.blockfrost.io/api/v0' # To config
     include HealthEndpoints # Array
 
     def initialize(project_id)
@@ -85,10 +82,10 @@ module Blockfrostruby
   end
 
   class CardanoTestNet < CardanoMainNet
-    CARDANO_TESTNET_URL = "another_url" #To config
+    CARDANO_TESTNET_URL = 'another_url' # To config
 
     def initialize(project_id)
-      @project_id = project_id
+      super
       @url = CARDANO_TESTNET_URL
     end
   end
