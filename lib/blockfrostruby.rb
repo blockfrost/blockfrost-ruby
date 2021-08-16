@@ -13,7 +13,7 @@ module Request
   require 'json'
 
   class << self
-    def get_response(url, project_id, _params = {}, _headers = nil)
+    def get_response(url, project_id, _use_desc_order=false,_params = {}, _headers = nil)
       # params = { :limit => 10, :page => 3, :order => 'desc' }
       # response = Net::HTTP.get_response(URI(url))
       uri = URI(url)
@@ -61,30 +61,24 @@ module HealthEndpoints
   end
 end
 
-module Config
-  class Configuration
-    attr_accessor :use_full_response_object, :name
-    # use asc/desc order
-    
-    def initialize(use_full_response_object = false, name = 'test')
-      @use_full_response_object = use_full_response_object
-      @name = name
-    end
-    
-    def [](value)
-      self.public_send(value)
-    end
-  end
-
+module Configuration
   class << self
-    def configure
-      @configuration = Configuration.new
-      yield @configuration if block_given?
-      @configuration
+    def default_config
+      {
+        # return_whole_object_in_request: false,
+        parallel_requests: 5,
+        use_desc_order_as_default: false,
+        name: '123'
+      }
     end
 
-    def config
-      @configuration || configure
+    def define_config(config)
+      result = default_config
+      config.each do |key, value|
+        # rescue if result[key.to_sym].nil?
+        result[key.to_sym] = value unless result[key.to_sym].nil?
+      end
+      result
     end
   end
 end
@@ -92,37 +86,19 @@ end
 module Blockfrostruby
   class CardanoMainNet
     include HealthEndpoints # EndpointsArray
-    #include Config
+    include Configuration
 
     attr_reader :config
 
-    def initialize(project_id, config=self.class.default_config)
+    def initialize(project_id, config=Configuration.default_config)
       @project_id = project_id
       @url = CARDANO_MAINNET_URL
-      @config = self.class.define_config(config)
+      @config = Configuration.define_config(config)
     end
 
-    
-    class << self
-      def get_custom_url
-        # used when user wants to add something in the url manually
-        # extend Request
-      end
-
-      def default_config
-        {
-          use_asc_order: true
-        }
-      end
-
-      def define_config(config)
-        result = default_config
-        config.each do |key, value|
-          # rescue if result[key.to_sym].nil?
-          result[key.to_sym] = value unless result[key.to_sym].nil?
-        end
-        result
-      end
+    def self.get_custom_url
+      # used when user wants to add something in the url manually
+      # extend Request
     end
   end
 
@@ -136,3 +112,32 @@ module Blockfrostruby
   class Error < StandardError; end
   # raise error if body status error
 end
+
+
+# module Config
+#   class Configuration
+#     attr_accessor :use_full_response_object, :name
+#     # use asc/desc order
+    
+#     def initialize(use_full_response_object = false, name = 'test')
+#       @use_full_response_object = use_full_response_object
+#       @name = name
+#     end
+    
+#     def [](value)
+#       self.public_send(value)
+#     end
+#   end
+
+#   class << self
+#     def configure
+#       @configuration = Configuration.new
+#       yield @configuration if block_given?
+#       @configuration
+#     end
+
+#     def config
+#       @configuration || configure
+#     end
+#   end
+# end
