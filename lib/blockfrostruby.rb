@@ -8,12 +8,15 @@
 require_relative 'blockfrostruby/version'
 require_relative 'blockfrostruby/constants'
 require_relative 'blockfrostruby/configuration'
+# Change to the https://stackoverflow.com/questions/735073/best-way-to-require-all-files-from-a-directory-in-ruby
 require_relative 'blockfrostruby/endpoints/health_endpoints'
+require_relative 'blockfrostruby/endpoints/metrics_endpoints'
 
 module Blockfrostruby
   class CardanoMainNet
-    include HealthEndpoints # EndpointsArray
     include Configuration
+    include HealthEndpoints # EndpointsArray
+    include MetricsEndpoints
 
     attr_reader :config, :project_id
 
@@ -26,6 +29,10 @@ module Blockfrostruby
     def self.get_custom_url
       # used when user wants to add something in the url manually
       # extend Request
+    end
+
+    def self.help_info
+      # provide a link to doc
     end
   end
 

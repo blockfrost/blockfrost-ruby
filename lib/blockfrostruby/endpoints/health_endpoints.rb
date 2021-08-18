@@ -3,7 +3,7 @@
 require_relative '../../blockfrostruby/request'
 
 module HealthEndpoints
-  extend Request # extend or include, why it works
+  extend Request
 
   def get_root
     Request.get_response("#{@url}/", @project_id)
