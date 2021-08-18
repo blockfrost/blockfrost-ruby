@@ -5,10 +5,11 @@ module Request
   require 'json'
 
   class << self
-    def get_response(url, project_id, _params = {}, _headers = nil)
+    def get_response(url, project_id, params = {}, _headers = nil)
       #  _use_desc_order = false
       # params = { :limit => 10, :page => 3, :order => 'desc' }
       # response = Net::HTTP.get_response(URI(url))
+      url = add_params_to_url(url, params)
       uri = URI(url)
       req = Net::HTTP::Get.new(uri)
       req['project_id'] = project_id
@@ -38,6 +39,16 @@ module Request
       body = response.header.content_type == 'application/json' ? JSON.parse(response.body) : response.body
       { status: response.code, body: body } # In config return whole object, default this one
       # Look in the JS implementation
+    end
+
+    def add_params_to_url(url, params)
+      # to work with previous versions of ruby 
+      # https://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
+      permitted_params = params.transform_keys(&:to_sym).slice(:order, :page, :count) 
+      return url if permitted_params.empty?
+      
+      request_params = permitted_params.map { |k, v| "#{k}=#{v}" }.join("&")
+      url = "#{url}?#{request_params}"
     end
   end
 end

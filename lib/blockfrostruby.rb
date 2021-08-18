@@ -3,7 +3,7 @@
 # gem build blockfrostruby
 # gem install ./blockfrostruby-0.1.0.gem
 # require 'blockfrostruby'
-# Blockfrostruby::CardanoMainNet
+# a = Blockfrostruby::CardanoMainNet.new()
 
 require_relative 'blockfrostruby/version'
 require_relative 'blockfrostruby/constants'
@@ -29,7 +29,7 @@ module Blockfrostruby
       @config = Configuration.define_config(config)
     end
 
-    def self.get_custom_url
+    def self.get_custom_url(_params)
       # used when user wants to add something in the url manually
       # extend Request
     end
