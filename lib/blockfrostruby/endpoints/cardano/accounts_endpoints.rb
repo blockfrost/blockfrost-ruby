@@ -9,4 +9,14 @@ module AccountsEndpoints
     # Example: stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc
     Request.get_response("#{@url}/accounts/#{address}", @project_id)
   end
+
+  def get_account_rewards_history(address, _count_, _page, _order)
+    # Example: stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc
+    Request.get_response("#{@url}/accounts/#{address}/rewards", @project_id)
+  end
+
+  def get_account_rewards_history_all(address, _order)
+    # Example: stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc
+    Request.get_response("#{@url}/accounts/#{address}/rewards", @project_id)
+  end
 end

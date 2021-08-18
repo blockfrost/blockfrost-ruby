@@ -6,7 +6,7 @@ module Configuration
       {
         return_whole_object_in_request: false,
         parallel_requests: 5,
-        use_desc_order_as_default: false
+        use_desc_order_as_default: false,
       }
     end
 
