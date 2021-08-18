@@ -2,7 +2,7 @@
 
 module Configuration
   class << self
-    def default_config
+    def default_config # To separate YML file
       {
         return_whole_object_in_request: false,
         parallel_requests: 5,

@@ -4,10 +4,11 @@ module Request
   require 'net/http'
   require 'json'
 
+  # REQUIRE CONFIG WITH METHOD WHICH CAN USE CONFIG
+  # SHOULD HAVE MANAGER METHOD
+
   class << self
     def get_response(url, project_id, params = {}, _headers = nil)
-      #  _use_desc_order = false
-      # params = { :limit => 10, :page => 3, :order => 'desc' }
       # response = Net::HTTP.get_response(URI(url))
       url = add_params_to_url(url, params)
       uri = URI(url)
@@ -27,9 +28,7 @@ module Request
       # end
     end
 
-    def get_full_object_response
-      # Call it if it set in config
-    end
+    # def get_full_object_response, get_formatted_response
 
     private
 
@@ -42,13 +41,13 @@ module Request
     end
 
     def add_params_to_url(url, params)
-      # to work with previous versions of ruby 
+      # to work with previous versions of ruby
       # https://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
-      permitted_params = params.transform_keys(&:to_sym).slice(:order, :page, :count) 
+      permitted_params = params.transform_keys(&:to_sym).slice(:order, :page, :count)
       return url if permitted_params.empty?
-      
-      request_params = permitted_params.map { |k, v| "#{k}=#{v}" }.join("&")
-      url = "#{url}?#{request_params}"
+
+      request_params = permitted_params.map { |k, v| "#{k}=#{v}" }.join('&')
+      "#{url}?#{request_params}"
     end
   end
 end
