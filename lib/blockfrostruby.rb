@@ -8,15 +8,18 @@
 require_relative 'blockfrostruby/version'
 require_relative 'blockfrostruby/constants'
 require_relative 'blockfrostruby/configuration'
+
 # Change to the https://stackoverflow.com/questions/735073/best-way-to-require-all-files-from-a-directory-in-ruby
-require_relative 'blockfrostruby/endpoints/health_endpoints'
-require_relative 'blockfrostruby/endpoints/metrics_endpoints'
+require_relative 'blockfrostruby/endpoints/cardano/health_endpoints'
+require_relative 'blockfrostruby/endpoints/cardano/metrics_endpoints'
+require_relative 'blockfrostruby/endpoints/cardano/accounts_endpoints'
 
 module Blockfrostruby
   class CardanoMainNet
     include Configuration
-    include HealthEndpoints # EndpointsArray
+    include HealthEndpoints
     include MetricsEndpoints
+    include AccountsEndpoints
 
     attr_reader :config, :project_id
 

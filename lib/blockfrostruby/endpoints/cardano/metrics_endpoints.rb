@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../blockfrostruby/request'
+require_relative '../../../blockfrostruby/request'
 
 module MetricsEndpoints
   extend Request
