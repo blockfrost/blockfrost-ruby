@@ -60,8 +60,10 @@ module Request
     def define_params(params, config)
       permitted_params = permitted(params)
       result = permitted_params
-      result[:order] = define_order(result[:order], config)
-      result.delete(:order) if result[:order] == nil
+      # result[:order] = define_order(result[:order], config)
+      # result.delete(:order) if result[:order] == nil
+      result[:count] = define_count(result[:count], config)
+      result.delete(:count) if result[:count] == nil
       result
     end
 
@@ -81,15 +83,38 @@ module Request
     end
 
     # Checks:
-      # 1. Pass ({}, {use_desc_order_as_default: false}), should return {}
-      # 2. Pass ({}, {use_desc_order_as_default: true}), should return {order: desc}
-      # 3. Pass ({ order: 'desc' }, {use_desc_order_as_default: true}), should return {order: desc}
-      # 4. Pass ({ order: 'asc' }, {use_desc_order_as_default: true}, should return {}
-      # 5. Pass ({ order: 'asc' }, {use_desc_order_as_default: false}), should return {}
-      # 6. Pass ({ order: 'desc'}, {use_desc_order_as_default: false}, should return {order: desc})
+    # 1. Pass ({}, {use_desc_order_as_default: false}), should return {}
+    # 2. Pass ({}, {use_desc_order_as_default: true}), should return {order: desc}
+    # 3. Pass ({ order: 'desc' }, {use_desc_order_as_default: true}), should return {order: desc}
+    # 4. Pass ({ order: 'asc' }, {use_desc_order_as_default: true}, should return {}
+    # 5. Pass ({ order: 'asc' }, {use_desc_order_as_default: false}), should return {}
+    # 6. Pass ({ order: 'desc'}, {use_desc_order_as_default: false}, should return {order: desc})
 
-      #count_param_in_config = config[:count]
-      #result.delete(:count) if permitted_params[:count].to_i == count_param_in_config.to_i
+    def define_count(count_param, object_config)
+      default_config = {
+        return_whole_object_in_request: false,
+        parallel_requests: 5,
+        use_desc_order_as_default: false,
+        default_count_per_page: 100
+      }
+      count_in_default_config = default_config[:default_count_per_page]
+      count_in_object_config = object_config[:default_count_per_page]
+      result = count_in_object_config if count_param == nil
+      result = count_param if count_param != nil
+      result = nil if result == count_in_default_config
+      result 
+    end
+    
+    # Checks:
+    # 1. Pass ({}, {default_count_per_page: 100}), should return {}
+    # 2. Pass ({}, {default_count_per_page: 5}), should return {count: 5}
+    # 3. Pass ({count: 5}, {default_count_per_page: 100}), should return {count: 5}
+    # 4. Pass ({count: 5}, {default_count_per_page: 5}), should return {count: 5}
+    # 5. Pass ({count: 100}, {default_count_per_page: 100}), should return {}
+    # 6. Pass ({count: 5}, {default_count_per_page: 100}), should return {count: 5})
+    
+
+    # Checks: pass combined params
 
     def changed_params
     end
