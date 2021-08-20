@@ -36,12 +36,10 @@ module Request
       { status: response.code, body: body } # In config return whole object, default this one
     end
 
-    def add_params_to_url(url, defined_params)
-      # to work with previous versions of ruby
-      # https://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
-      return url if defined_params.empty?
+    def add_params_to_url(url, params)
+      return url if params.empty?
 
-      request_params = defined_params.map { |k, v| "#{k}=#{v}" }.join('&')
+      request_params = params.map { |k, v| "#{k}=#{v}" }.join('&')
       "#{url}?#{request_params}"
     end
   end

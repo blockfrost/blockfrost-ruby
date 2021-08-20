@@ -8,8 +8,8 @@ module Params
   class << self
     def define_params(params, config)
       permitted_params = permitted(params)
-      result = permitted_params
-      result[:order] = define_order(result[:order], config)
+      result = permitted_params # May move
+      result[:order] = define_order(result[:order], config) # smth like result.add(defined_order)
       result.delete(:order) if result[:order].nil?
       result[:count] = define_count(result[:count], config)
       result.delete(:count) if result[:count].nil?
@@ -19,6 +19,8 @@ module Params
     private
 
     def permitted(params)
+      # to work with previous versions of ruby
+      # https://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
       params.transform_keys(&:to_sym).slice(:order, :page, :count)
     end
 
