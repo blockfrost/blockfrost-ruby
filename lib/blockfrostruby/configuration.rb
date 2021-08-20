@@ -5,10 +5,9 @@ module Configuration
     # TO YML file
     def default_config
       {
-        return_whole_object_in_request: false,
-        parallel_requests: 5,
         use_desc_order_as_default: false,
-        default_count_per_page: 100
+        default_count_per_page: 100,
+        return_full_object_in_response: false
       }
     end
 

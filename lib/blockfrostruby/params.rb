@@ -26,10 +26,9 @@ module Params
 
     def define_order(order_param, object_config)
       default_config = {
-        return_whole_object_in_request: false,
-        parallel_requests: 5,
         use_desc_order_as_default: false,
-        default_count_per_page: 100
+        default_count_per_page: 100,
+        return_full_object_in_response: false
       }
       order_in_default_config = default_config[:use_desc_order_as_default] == false ? 'asc' : 'desc'
       order_in_object_config = object_config[:use_desc_order_as_default] == false ? 'asc' : 'desc'
@@ -49,10 +48,9 @@ module Params
 
     def define_count(count_param, object_config)
       default_config = {
-        return_whole_object_in_request: false,
-        parallel_requests: 5,
         use_desc_order_as_default: false,
-        default_count_per_page: 100
+        default_count_per_page: 100,
+        return_full_object_in_response: false
       }
       count_in_default_config = default_config[:default_count_per_page]
       count_in_object_config = object_config[:default_count_per_page]

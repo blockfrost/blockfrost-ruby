@@ -18,7 +18,7 @@ module Request
       format_response(response) # may be get_formatted_response
     end
 
-    def get_all_results(url, project_id)
+    def get_all_results(url, project_id, params = {})
       # https://docs.ruby-lang.org/en/2.0.0/Net/HTTP.html
       # uri = URI('http://example.com/some_path?query=string')
       # Net::HTTP.start(uri.host, uri.port) do |http|
