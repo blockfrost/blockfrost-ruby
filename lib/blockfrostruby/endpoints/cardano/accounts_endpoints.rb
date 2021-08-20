@@ -9,20 +9,13 @@ module AccountsEndpoints
 
   # Example: stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc
 
-  def get_account_specific_address(address, params = {})
-    params = Params.define_params(params, @config)
-    Request.get_response("#{@url}/accounts/#{address}", @project_id, params)
+  def get_account_address(address)
+    Request.get_response("#{@url}/accounts/#{address}", @project_id)
   end
 
   def get_account_rewards(address, params = {})
     params = Params.define_params(params, @config)
     Request.get_response("#{@url}/accounts/#{address}/rewards", @project_id, params)
-  end
-
-  # ALL -- THINK HOW TO PASS IT THROUGH CONFIG
-  def get_account_rewards_all(address, params = {})
-    # params = Params.define_params(params, @config)
-    # Request.get_all_pages("#{@url}/accounts/#{address}/rewards", @project_id, params)
   end
 
   def get_account_history(address, params = {})
@@ -59,4 +52,10 @@ module AccountsEndpoints
     params = Params.define_params(params, @config)
     Request.get_response("#{@url}/accounts/#{address}/addresses/assets", @project_id, params)
   end
+
+  # METHODS WITH GET ALL
+  # def get_account_rewards_all(address, params = {})
+  # params = Params.define_params(params, @config)
+  # Request.get_all_pages("#{@url}/accounts/#{address}/rewards", @project_id, params)
+  # end
 end

@@ -16,7 +16,7 @@ module Params
     private
 
     def extract_params(params)
-      params.transform_keys(&:to_sym).slice(:order, :page, :count)
+      params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to)
       # to work with previous versions of ruby
       # https://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
     end
