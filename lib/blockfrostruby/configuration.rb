@@ -1,20 +1,19 @@
 # frozen_string_literal: true
 
+require 'yaml'
+
 module Configuration
   class << self
-    # TO YML file
     def default_config
-      {
-        use_desc_order_as_default: false, # rename to asc
-        default_count_per_page: 100,
-        parallel_requests: 5
-      }
+      YAML.load(
+        File.open('lib/blockfrostruby/config.yml').read
+      ).transform_keys(&:to_sym)
     end
 
     def define_config(config)
       result = default_config
       config.each do |key, value|
-        result[key.to_sym] = value unless result[key.to_sym].nil?
+        result[key] = value unless result[key].nil?
       end
       result
     end
