@@ -6,19 +6,6 @@ module Params
   include Configuration
 
   class << self
-    def permitted(params)
-      params.transform_keys(&:to_sym).slice(:order, :page, :count)
-    end
-
-    def add_params_to_url(url, defined_params)
-      # to work with previous versions of ruby
-      # https://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
-      return url if defined_params.empty?
-
-      request_params = defined_params.map { |k, v| "#{k}=#{v}" }.join('&')
-      "#{url}?#{request_params}"
-    end
-
     def define_params(params, config)
       permitted_params = permitted(params)
       result = permitted_params
@@ -27,6 +14,12 @@ module Params
       result[:count] = define_count(result[:count], config)
       result.delete(:count) if result[:count] == nil
       result
+    end
+
+    private 
+
+    def permitted(params)
+      params.transform_keys(&:to_sym).slice(:order, :page, :count)
     end
 
     def define_order(order_param, object_config)

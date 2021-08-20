@@ -5,22 +5,17 @@ require 'json'
 require_relative 'configuration'
 
 module Request
-  # REQUIRE CONFIG WITH METHOD WHICH CAN USE CONFIG
-  # SHOULD HAVE MANAGER METHOD
   include Configuration
 
   class << self
-    def get_response(url, project_id, params = {}, config) #url_with_params
-      # response = Net::HTTP.get_response(URI(url))
-
-      url = add_params_to_url(url, define_params(params, config))
-      puts url
-      # uri = URI(url)
-      # req = Net::HTTP::Get.new(uri)
-      # req['project_id'] = project_id
-      # # TIMEOUT ERROR
-      # response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
-      # format_response(response) # may be get_formatted_response
+    def get_response(url, project_id, params={}) #url_with_params
+      url = add_params_to_url(url, params)
+      uri = URI(url)
+      req = Net::HTTP::Get.new(uri)
+      req['project_id'] = project_id
+      # TIMEOUT ERROR
+      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
+      format_response(response) # may be get_formatted_response
     end
 
     def get_all_results(url, project_id)
@@ -37,8 +32,6 @@ module Request
     private
 
     def format_response(response)
-      # resque from uncoded:
-      # Net::HTTP.get(uri).encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
       body = response.header.content_type == 'application/json' ? JSON.parse(response.body) : response.body
       { status: response.code, body: body } # In config return whole object, default this one
     end
