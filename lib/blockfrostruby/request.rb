@@ -8,7 +8,7 @@ module Request
   include Configuration
 
   class << self
-    def get_response(url, project_id, params={}) #url_with_params
+    def get_response(url, project_id, params = {})
       url = add_params_to_url(url, params)
       uri = URI(url)
       req = Net::HTTP::Get.new(uri)

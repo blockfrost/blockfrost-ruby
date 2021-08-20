@@ -10,13 +10,13 @@ module Params
       permitted_params = permitted(params)
       result = permitted_params
       result[:order] = define_order(result[:order], config)
-      result.delete(:order) if result[:order] == nil
+      result.delete(:order) if result[:order].nil?
       result[:count] = define_count(result[:count], config)
-      result.delete(:count) if result[:count] == nil
+      result.delete(:count) if result[:count].nil?
       result
     end
 
-    private 
+    private
 
     def permitted(params)
       params.transform_keys(&:to_sym).slice(:order, :page, :count)
@@ -31,8 +31,8 @@ module Params
       }
       order_in_default_config = default_config[:use_desc_order_as_default] == false ? 'asc' : 'desc'
       order_in_object_config = object_config[:use_desc_order_as_default] == false ? 'asc' : 'desc'
-      result = order_in_object_config if order_param == nil
-      result = order_param if order_param != nil
+      result = order_in_object_config if order_param.nil?
+      result = order_param unless order_param.nil?
       result = nil if result == order_in_default_config
       result
     end
@@ -54,12 +54,12 @@ module Params
       }
       count_in_default_config = default_config[:default_count_per_page]
       count_in_object_config = object_config[:default_count_per_page]
-      result = count_in_object_config if count_param == nil
-      result = count_param if count_param != nil
+      result = count_in_object_config if count_param.nil?
+      result = count_param unless count_param.nil?
       result = nil if result == count_in_default_config
-      result 
+      result
     end
-    
+
     # Checks:
     # 1. Pass ({}, {default_count_per_page: 100}), should return {}
     # 2. Pass ({}, {default_count_per_page: 5}), should return {count: 5}
@@ -67,7 +67,7 @@ module Params
     # 4. Pass ({count: 5}, {default_count_per_page: 5}), should return {count: 5}
     # 5. Pass ({count: 100}, {default_count_per_page: 100}), should return {}
     # 6. Pass ({count: 5}, {default_count_per_page: 100}), should return {count: 5})
-    
+
     # Checks: pass combined params
   end
 end
