@@ -14,6 +14,7 @@ require_relative 'blockfrostruby/endpoints/cardano/health_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/metrics_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/accounts_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/addresses_endpoints'
+require_relative 'blockfrostruby/endpoints/cardano/assets_endpoints'
 
 module Blockfrostruby
   class CardanoMainNet
@@ -22,6 +23,7 @@ module Blockfrostruby
     include MetricsEndpoints
     include AccountsEndpoints
     include AddressesEndpoints
+    include AssetsEndpoints
 
     attr_reader :config, :project_id, :url
 
