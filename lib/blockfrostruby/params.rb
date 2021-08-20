@@ -18,7 +18,7 @@ module Params
 
     private
 
-    def permitted(params)
+    def permitted(params) # rename
       # to work with previous versions of ruby
       # https://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
       params.transform_keys(&:to_sym).slice(:order, :page, :count)
@@ -28,7 +28,7 @@ module Params
       default_config = {
         use_desc_order_as_default: false,
         default_count_per_page: 100,
-        return_full_object_in_response: false
+        parallel_requests: 5
       }
       order_in_default_config = default_config[:use_desc_order_as_default] == false ? 'asc' : 'desc'
       order_in_object_config = object_config[:use_desc_order_as_default] == false ? 'asc' : 'desc'
@@ -50,7 +50,7 @@ module Params
       default_config = {
         use_desc_order_as_default: false,
         default_count_per_page: 100,
-        return_full_object_in_response: false
+        parallel_requests: 5
       }
       count_in_default_config = default_config[:default_count_per_page]
       count_in_object_config = object_config[:default_count_per_page]

@@ -15,7 +15,7 @@ module Request
       req['project_id'] = project_id
       # TIMEOUT ERROR
       response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
-      format_response(response) # may be get_formatted_response
+      format_response(response)
     end
 
     def get_all_results(url, project_id, params = {})
@@ -27,13 +27,11 @@ module Request
       # end
     end
 
-    # def get_full_object_response, get_formatted_response
-
     private
 
     def format_response(response)
       body = response.header.content_type == 'application/json' ? JSON.parse(response.body) : response.body
-      { status: response.code, body: body } # In config return whole object, default this one
+      { status: response.code, body: body }
     end
 
     def add_params_to_url(url, params)

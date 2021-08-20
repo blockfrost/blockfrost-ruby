@@ -5,9 +5,9 @@ module Configuration
     # TO YML file
     def default_config
       {
-        use_desc_order_as_default: false,
+        use_desc_order_as_default: false, # rename to asc
         default_count_per_page: 100,
-        return_full_object_in_response: false
+        parallel_requests: 5
       }
     end
 
