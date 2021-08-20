@@ -24,13 +24,9 @@ module Params
     end
 
     def define_order(order_param, object_config)
-      default_config = {
-        use_desc_order_as_default: false,
-        default_count_per_page: 100,
-        parallel_requests: 5
-      }
-      order_in_default_config = default_config[:use_desc_order_as_default] == false ? 'asc' : 'desc'
-      order_in_object_config = object_config[:use_desc_order_as_default] == false ? 'asc' : 'desc'
+      default_config = Configuration.default_config
+      order_in_default_config = default_config[:use_asc_order_as_default] == true ? 'asc' : 'desc'
+      order_in_object_config = object_config[:use_asc_order_as_default] == true ? 'asc' : 'desc'
       result = order_in_object_config if order_param.nil?
       result = order_param unless order_param.nil?
       result = nil if result == order_in_default_config
@@ -46,11 +42,7 @@ module Params
     # 6. Pass ({ order: 'desc'}, {use_desc_order_as_default: false}, should return {order: desc})
 
     def define_count(count_param, object_config)
-      default_config = {
-        use_desc_order_as_default: false,
-        default_count_per_page: 100,
-        parallel_requests: 5
-      }
+      default_config = Configuration.default_config
       count_in_default_config = default_config[:default_count_per_page]
       count_in_object_config = object_config[:default_count_per_page]
       result = count_in_object_config if count_param.nil?

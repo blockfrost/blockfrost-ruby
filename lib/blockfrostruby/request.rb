@@ -2,11 +2,8 @@
 
 require 'net/http'
 require 'json'
-require_relative 'configuration'
 
 module Request
-  include Configuration
-
   class << self
     def get_response(url, project_id, params = {})
       url = add_params_to_url(url, params)

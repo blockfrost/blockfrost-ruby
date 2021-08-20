@@ -5,7 +5,7 @@ require 'yaml'
 module Configuration
   class << self
     def default_config
-      YAML.load(
+      YAML.safe_load(
         File.open('lib/blockfrostruby/config.yml').read
       ).transform_keys(&:to_sym)
     end
