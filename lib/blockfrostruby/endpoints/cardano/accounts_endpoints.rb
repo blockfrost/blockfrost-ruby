@@ -43,7 +43,7 @@ module AccountsEndpoints
   end
 
   def get_account_addresses(address, params = {})
-    Request.get_response("#{@url}/accounts/#{address}/addresses", @project_id, params)
+    Request.get_response("#{@url}/accounts/#{address}/addresses", @project_id, params, @config)
   end
 
   def get_account_addresses_assets(address, params = {})

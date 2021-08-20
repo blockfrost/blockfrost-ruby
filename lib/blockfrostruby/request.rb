@@ -2,7 +2,7 @@
 
 require 'net/http'
 require 'json'
-require_relative 'blockfrostruby/configuration'
+require_relative 'configuration'
 
 module Request
   # REQUIRE CONFIG WITH METHOD WHICH CAN USE CONFIG
@@ -10,10 +10,11 @@ module Request
   include Configuration
 
   class << self
-    def get_response(url, project_id, params = {}, _headers = nil)
+    def get_response(url, project_id, params = {}, config) #url_with_params
       # response = Net::HTTP.get_response(URI(url))
 
-      # url = add_params_to_url(url, params)
+      url = add_params_to_url(url, define_params(params, config))
+      puts url
       # uri = URI(url)
       # req = Net::HTTP::Get.new(uri)
       # req['project_id'] = project_id
@@ -22,7 +23,7 @@ module Request
       # format_response(response) # may be get_formatted_response
     end
 
-    def get_all_pages(url)
+    def get_all_results(url, project_id)
       # https://docs.ruby-lang.org/en/2.0.0/Net/HTTP.html
       # uri = URI('http://example.com/some_path?query=string')
       # Net::HTTP.start(uri.host, uri.port) do |http|
@@ -40,28 +41,26 @@ module Request
       # Net::HTTP.get(uri).encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
       body = response.header.content_type == 'application/json' ? JSON.parse(response.body) : response.body
       { status: response.code, body: body } # In config return whole object, default this one
-      # Look in the JS implementation
     end
 
     def permitted(params)
       params.transform_keys(&:to_sym).slice(:order, :page, :count)
     end
 
-    def add_params_to_url(url, params)
+    def add_params_to_url(url, defined_params)
       # to work with previous versions of ruby
       # https://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
-      permitted_params = permitted(params)
-      return url if permitted_params.empty?
+      return url if defined_params.empty?
 
-      request_params = permitted_params.map { |k, v| "#{k}=#{v}" }.join('&')
+      request_params = defined_params.map { |k, v| "#{k}=#{v}" }.join('&')
       "#{url}?#{request_params}"
     end
 
     def define_params(params, config)
       permitted_params = permitted(params)
       result = permitted_params
-      # result[:order] = define_order(result[:order], config)
-      # result.delete(:order) if result[:order] == nil
+      result[:order] = define_order(result[:order], config)
+      result.delete(:order) if result[:order] == nil
       result[:count] = define_count(result[:count], config)
       result.delete(:count) if result[:count] == nil
       result
@@ -113,10 +112,6 @@ module Request
     # 5. Pass ({count: 100}, {default_count_per_page: 100}), should return {}
     # 6. Pass ({count: 5}, {default_count_per_page: 100}), should return {count: 5})
     
-
     # Checks: pass combined params
-
-    def changed_params
-    end
   end
 end

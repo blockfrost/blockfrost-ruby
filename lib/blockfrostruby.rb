@@ -21,7 +21,7 @@ module Blockfrostruby
     include MetricsEndpoints
     include AccountsEndpoints
 
-    attr_reader :config, :project_id
+    attr_reader :config, :project_id, :url
 
     def initialize(project_id, config = {})
       @project_id = project_id
