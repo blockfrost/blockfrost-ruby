@@ -7,8 +7,7 @@ module Params
 
   class << self
     def define_params(params, config)
-      permitted_params = permitted(params)
-      result = permitted_params # May move
+      result = extract_params(params)
       result[:order] = define_order(result[:order], config) # smth like result.add(defined_order)
       result.delete(:order) if result[:order].nil?
       result[:count] = define_count(result[:count], config)
@@ -18,7 +17,7 @@ module Params
 
     private
 
-    def permitted(params) # rename
+    def extract_params(params)
       # to work with previous versions of ruby
       # https://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
       params.transform_keys(&:to_sym).slice(:order, :page, :count)
