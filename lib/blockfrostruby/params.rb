@@ -27,10 +27,7 @@ module Params
       default_config = Configuration.default_config
       order_in_default_config = default_config[:use_asc_order_as_default] == true ? 'asc' : 'desc'
       order_in_object_config = object_config[:use_asc_order_as_default] == true ? 'asc' : 'desc'
-      result = order_in_object_config if order_param.nil?
-      result = order_param unless order_param.nil?
-      result = nil if result == order_in_default_config
-      result
+      define_value(order_in_default_config, order_in_object_config, order_param)
     end
 
     # Checks:
@@ -45,10 +42,7 @@ module Params
       default_config = Configuration.default_config
       count_in_default_config = default_config[:default_count_per_page]
       count_in_object_config = object_config[:default_count_per_page]
-      result = count_in_object_config if count_param.nil?
-      result = count_param unless count_param.nil?
-      result = nil if result == count_in_default_config
-      result
+      define_value(count_in_default_config, count_in_object_config, count_param)
     end
 
     # Checks:
@@ -60,5 +54,11 @@ module Params
     # 6. Pass ({count: 5}, {default_count_per_page: 100}), should return {count: 5})
 
     # Checks: pass combined params
+
+    def define_value(default_config_value, object_config_value, params_value)
+      result = params_value.nil? ? object_config_value : params_value
+      result = nil if result == default_config_value
+      result
+    end
   end
 end
