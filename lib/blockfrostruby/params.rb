@@ -8,19 +8,17 @@ module Params
   class << self
     def define_params(params, config)
       result = extract_params(params)
-      result[:order] = define_order(result[:order], config) # smth like result.add(defined_order)
-      result.delete(:order) if result[:order].nil?
+      result[:order] = define_order(result[:order], config)
       result[:count] = define_count(result[:count], config)
-      result.delete(:count) if result[:count].nil?
-      result
+      result.compact
     end
 
     private
 
     def extract_params(params)
+      params.transform_keys(&:to_sym).slice(:order, :page, :count)
       # to work with previous versions of ruby
       # https://stackoverflow.com/questions/800122/best-way-to-convert-strings-to-symbols-in-hash
-      params.transform_keys(&:to_sym).slice(:order, :page, :count)
     end
 
     def define_order(order_param, object_config)
