@@ -1,11 +1,31 @@
 # Blockfrostruby
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/blockfrostruby`. To experiment with that code, run `bin/console` for an interactive prompt.
+Ruby SDK to work with Blockfrost (Cardano Blockchain API)
+Blockfrost is a hosted API as a service serving the data from the Cardano blockchain.
+This gem is Ruby SDK for Blockfrost.io to enable developers
+to use full power of this API without having to create basic functions for it.
+The OpenAPI documentation is hosted at https://github.com/blockfrost/openapi.\
+This gem is licensed under ASL 2.0.
 
-TODO: Delete this and the text above, and describe your gem
-
+More information about using this API can be found on https://docs.blockfrost.io/
 ## Installation
 
+For now it's not hosted on a RubyGems,
+so you can install this SDK only from this repo.
+
+To do this, download this repo to your machine, go to the directory:
+
+    $ cd path-to-dir-with-this-repo
+
+And then run next commands:
+
+    $ git add .
+    $ gem build blockfrostruby
+    $ gem install ./blockfrostruby-0.1.0.gem
+
+That's it! You may use the gem in your projects.
+
+<!-- 
 Add this line to your application's Gemfile:
 
 ```ruby
@@ -18,7 +38,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install blockfrostruby
+    $ gem install blockfrostruby -->
 
 ## Usage
 
