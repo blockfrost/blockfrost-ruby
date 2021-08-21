@@ -16,6 +16,7 @@ require_relative 'blockfrostruby/endpoints/cardano/accounts_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/addresses_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/assets_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/blocks_endpoints'
+require_relative 'blockfrostruby/endpoints/cardano/epochs_endpoints'
 
 module Blockfrostruby
   class CardanoMainNet
@@ -26,6 +27,7 @@ module Blockfrostruby
     include AddressesEndpoints
     include AssetsEndpoints
     include BlocksEndpoints
+    include EpochsEndpoints
 
     attr_reader :config, :project_id, :url
 
