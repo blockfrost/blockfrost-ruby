@@ -1,0 +1,3 @@
+use_asc_order_as_default: true
+default_count_per_page: 100
+# parallel_requests: 5
