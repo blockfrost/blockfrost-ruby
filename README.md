@@ -10,14 +10,14 @@ This gem is licensed under ASL 2.0.
 More information about using this API can be found on https://docs.blockfrost.io/
 ## Installation
 
-For now it's not hosted on a RubyGems,
+For now, it's not hosted on a RubyGems,
 so you can install this SDK only from this repo.
 
-To do this, download this repo to your machine, go to the directory:
+To do this, download this repo to your machine, then go to the directory:
 
     $ cd path-to-dir-with-this-repo
 
-And then run next commands:
+And run next commands:
 
     $ git add .
     $ gem build blockfrostruby
@@ -42,9 +42,9 @@ Or install it yourself as:
 
 ## Usage
 
-To use this SDK, you first need login into to blockfrost.io create your project to retrive your API token.
+To use this SDK, you first need login into blockfrost.io and create your project to retrieve your API token.
 
-And here ate examples of how to use this SDK.
+And here are examples of how to use this SDK.
 
 ```ruby
 
@@ -58,13 +58,13 @@ blockfrost.get_transaction('f6780212...36f0c20b6')
 # {:status=>"200", :body=>{"is_healthy"=>true}}
 # {:status=>"404", :body=>{"status_code"=>404, "error"=>"Not Found", "message"=>"The requested component has not been found."}}
 
-# Requests which returning a list of result can be called with params.
+# Requests which returns a list of result can be called with params.
 # Allowed params: :count, :page, :order, :from, :to.
 blockfrost.get_asset_history('81791e9e..1303035', { count: 50, page: 3, order: 'desc' })
 
 
-# You may define what value should be used by default when you initialize object.
-# Default values is: { use_asc_order_as_default: true, default_count_per_page: 100 }
+# You may define what value should be used by default when you initialize the object.
+# Default values are: { use_asc_order_as_default: true, default_count_per_page: 100 }
 config = { use_asc_order_as_default: false, default_count_per_page: 10 }
 blockfrost_configured = Blockfrostruby::CardanoMainNet.new('your-API-key', config)
 blockfrost_configured.get_block_latest_transactions # will add order=asc&count=10 to request
@@ -76,9 +76,8 @@ blockfrost_configured.get_block_latest_transactions({count: 20}) # will add orde
 # And you can use CardanoTestNet
 blockfrost_testnet = Blockfrostruby::CardanoTestNet.new('your-API-key')
 
-# All endpoints can be found here: https://docs.blockfrost.io/
-
 ```
+All endpoints can be found here: https://docs.blockfrost.io/
 
 ## Development
 
