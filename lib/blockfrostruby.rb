@@ -20,6 +20,7 @@ require_relative 'blockfrostruby/endpoints/cardano/epochs_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/ledger_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/metadata_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/network_endpoints'
+require_relative 'blockfrostruby/endpoints/cardano/pools_endpoints'
 
 module Blockfrostruby
   class CardanoMainNet
@@ -34,6 +35,7 @@ module Blockfrostruby
     include LedgerEndpoints
     include MetadataEndpoints
     include NetworkEndpoints
+    include PoolsEndpoints
 
     attr_reader :config, :project_id, :url
 
@@ -61,5 +63,4 @@ module Blockfrostruby
   end
 
   class Error < StandardError; end
-  # raise error if body status error
 end
