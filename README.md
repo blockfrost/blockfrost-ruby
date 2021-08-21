@@ -25,7 +25,7 @@ And then run next commands:
 
 That's it! You may use the gem in your projects.
 
-<!-- 
+<!--
 Add this line to your application's Gemfile:
 
 ```ruby
@@ -42,7 +42,43 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To use this SDK, you first need login into to blockfrost.io create your project to retrive your API token.
+
+And here ate examples of how to use this SDK.
+
+```ruby
+
+require 'blockfrostruby'
+
+blockfrost = Blockfrostruby::CardanoMainNet.new('your-API-key')
+blockfrost.get_health
+blockfrost.get_transaction('f6780212...36f0c20b6')
+
+# The result of request is a hash object with keys [:status, :body]. Examples:
+# {:status=>"200", :body=>{"is_healthy"=>true}}
+# {:status=>"404", :body=>{"status_code"=>404, "error"=>"Not Found", "message"=>"The requested component has not been found."}}
+
+# Requests which returning a list of result can be called with params.
+# Allowed params: :count, :page, :order, :from, :to.
+blockfrost.get_asset_history('81791e9e..1303035', { count: 50, page: 3, order: 'desc' })
+
+
+# You may define what value should be used by default when you initialize object.
+# Default values is: { use_asc_order_as_default: true, default_count_per_page: 100 }
+config = { use_asc_order_as_default: false, default_count_per_page: 10 }
+blockfrost_configured = Blockfrostruby::CardanoMainNet.new('your-API-key', config)
+blockfrost_configured.get_block_latest_transactions # will add order=asc&count=10 to request
+
+# But you're still able to set params for specific action:
+blockfrost_configured.get_block_latest_transactions({count: 20}) # will add order=asc&count=20 to request
+
+
+# And you can use CardanoTestNet
+blockfrost_testnet = Blockfrostruby::CardanoTestNet.new('your-API-key')
+
+# All endpoints can be found here: https://docs.blockfrost.io/
+
+```
 
 ## Development
 
@@ -52,4 +88,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/blockfrostruby.
+Bug reports and pull requests are welcome on GitHub at https://github.com/blockfrost/blockfrostruby.
