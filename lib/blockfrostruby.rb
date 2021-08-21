@@ -55,4 +55,5 @@ module Blockfrostruby
   end
 
   class Error < StandardError; end
+  # Check with unworking network
 end
