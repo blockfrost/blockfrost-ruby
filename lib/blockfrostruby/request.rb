@@ -15,15 +15,6 @@ module Request
       format_response(response)
     end
 
-    def get_all_results(url, project_id, params = {})
-      # https://docs.ruby-lang.org/en/2.0.0/Net/HTTP.html
-      # uri = URI('http://example.com/some_path?query=string')
-      # Net::HTTP.start(uri.host, uri.port) do |http|
-      #   request = Net::HTTP::Get.new uri
-      #   response = http.request request # Net::HTTPResponse object
-      # end
-    end
-
     def post_request_cbor(url, project_id, body, params = {})
       url = add_params_to_url(url, params)
       puts "URL: #{url}"

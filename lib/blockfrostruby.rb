@@ -9,7 +9,6 @@ require_relative 'blockfrostruby/version'
 require_relative 'blockfrostruby/constants'
 require_relative 'blockfrostruby/configuration'
 
-# Change to the https://stackoverflow.com/questions/735073/best-way-to-require-all-files-from-a-directory-in-ruby
 require_relative 'blockfrostruby/endpoints/cardano/health_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/metrics_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/accounts_endpoints'
@@ -45,15 +44,6 @@ module Blockfrostruby
       @project_id = project_id
       @url = CARDANO_MAINNET_URL
       @config = Configuration.define_config(config)
-    end
-
-    def self.get_custom_url(_params)
-      # used when user wants to add something in the url manually
-      # extend Request
-    end
-
-    def self.help_info
-      # provide a link to doc
     end
   end
 
