@@ -3,7 +3,7 @@
 # gem build blockfrostruby
 # gem install ./blockfrostruby-0.1.0.gem
 # require 'blockfrostruby'
-# a = Blockfrostruby::CardanoMainNet.new()
+# blockfrost = Blockfrostruby::CardanoMainNet.new()
 
 require_relative 'blockfrostruby/version'
 require_relative 'blockfrostruby/constants'

@@ -49,5 +49,7 @@ module TransactionsEndpoints
     Request.get_response("#{@url}/txs/#{hash}/metadata/cbor", @project_id)
   end
 
-  # METHODS WITH GET ALL
+  def post_transaction(transaction_data)
+    Request.post_request_cbor("#{@url}/tx/submit", @project_id, transaction_data)
+  end
 end
