@@ -21,6 +21,7 @@ require_relative 'blockfrostruby/endpoints/cardano/metadata_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/network_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/pools_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/transactions_endpoints'
+require_relative 'blockfrostruby/endpoints/cardano/nutlink_endpoints'
 require_relative 'blockfrostruby/endpoints/ipfs/ipfs_endpoints'
 
 module Blockfrostruby
@@ -49,6 +50,7 @@ module Blockfrostruby
     include NetworkEndpoints
     include PoolsEndpoints
     include TransactionsEndpoints
+    include NutlinkEndpoints
 
     def initialize(project_id, config = {})
       super
@@ -73,5 +75,5 @@ module Blockfrostruby
   end
 
   class Error < StandardError; end
-  # Check with unworking network
+  # TODO: Check with unworking network
 end
