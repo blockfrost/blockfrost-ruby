@@ -25,11 +25,10 @@ module Request
       Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
     end
 
-    def post_file(url, project_id, new_filename, filepath)
+    def post_file(url, project_id, filepath)
       # Or directory
-      # puts url
       uri = URI(url)
-      file = [[new_filename, File.open(filepath)]] # ./lib/blockfrostruby/version.rb
+      file = [['upload', File.open(filepath)]]
       req = Net::HTTP::Post.new(uri)
       req['project_id'] = project_id
       req.set_form file, 'multipart/form-data'

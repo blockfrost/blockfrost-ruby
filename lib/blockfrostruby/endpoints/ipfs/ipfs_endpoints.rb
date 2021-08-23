@@ -20,8 +20,8 @@ module IPFSEndpoints
     Request.get_response("#{@url}/ipfs/gateway/#{ipfs_path}", @project_id)
   end
 
-  def add_a_file(new_filename, filepath)
-    Request.post_file("#{@url}/ipfs/add", @project_id, new_filename, filepath)
+  def add_a_file(filepath)
+    Request.post_file("#{@url}/ipfs/add", @project_id, filepath)
   end
 
   # METHODS WITH GET ALL
