@@ -28,5 +28,9 @@ module IPFSEndpoints
     Request.post_request_raw("#{@url}/ipfs/pin/add/#{ipfs_path}", @project_id)
   end
 
+  def remove_pinned_object(ipfs_path)
+    Request.post_request_raw("#{@url}/ipfs/pin/remove/#{ipfs_path}", @project_id)
+  end
+
   # METHODS WITH GET ALL
 end
