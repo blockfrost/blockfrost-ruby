@@ -24,5 +24,9 @@ module IPFSEndpoints
     Request.post_file("#{@url}/ipfs/add", @project_id, filepath)
   end
 
+  def pin_an_object(ipfs_path)
+    Request.post_request_raw("#{@url}/ipfs/pin/add/#{ipfs_path}", @project_id)
+  end
+
   # METHODS WITH GET ALL
 end
