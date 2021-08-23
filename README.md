@@ -70,11 +70,33 @@ blockfrost_configured = Blockfrostruby::CardanoMainNet.new('your-API-key', confi
 blockfrost_configured.get_block_latest_transactions # will add order=asc&count=10 to request
 
 # But you're still able to set params for specific action:
-blockfrost_configured.get_block_latest_transactions({count: 20}) # will add order=asc&count=20 to request
+blockfrost_configured.get_block_latest_transactions({ count: 20 }) # will add order=asc&count=20 to request
 
+# ==================
+# ==================
 
-# And you can use CardanoTestNet
+# On the other words: 
+
+# 1. Install the gem and require it
+
+require 'blockfrostruby'
+
+# 2. Initialize the object with the network:
+
+blockfrost_mainnet = Blockfrostruby::CardanoMainNet.new('your-API-key')
 blockfrost_testnet = Blockfrostruby::CardanoTestNet.new('your-API-key')
+blockfrost_ipfs = Blockfrostruby::IPFS.new('your-API-key')
+
+# 3. When you initialize, you may configure what params this object will use as default:
+
+config = { default_count_per_page: 10 }
+blockfrost_configured = Blockfrostruby::CardanoMainNet.new('your-API-key', config)
+
+# 4. And you may pass params explicitly for every request if that request accept params
+
+blockfrost_configured.get_block_latest_transactions({ count: 20 })
+
+# That's it! Enjoy
 
 ```
 All endpoints can be found here: https://docs.blockfrost.io/

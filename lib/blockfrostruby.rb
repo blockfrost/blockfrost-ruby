@@ -21,10 +21,23 @@ require_relative 'blockfrostruby/endpoints/cardano/metadata_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/network_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/pools_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/transactions_endpoints'
+require_relative 'blockfrostruby/endpoints/cardano/nutlink_endpoints'
+require_relative 'blockfrostruby/endpoints/ipfs/ipfs_endpoints'
 
 module Blockfrostruby
-  class CardanoMainNet
+  class Net
     include Configuration
+
+    attr_reader :config, :project_id, :url
+
+    def initialize(project_id, config = {})
+      @project_id = project_id
+      @url = nil
+      @config = Configuration.define_config(config)
+    end
+  end
+
+  class CardanoMainNet < Net
     include HealthEndpoints
     include MetricsEndpoints
     include AccountsEndpoints
@@ -37,13 +50,11 @@ module Blockfrostruby
     include NetworkEndpoints
     include PoolsEndpoints
     include TransactionsEndpoints
-
-    attr_reader :config, :project_id, :url
+    include NutlinkEndpoints
 
     def initialize(project_id, config = {})
-      @project_id = project_id
+      super
       @url = CARDANO_MAINNET_URL
-      @config = Configuration.define_config(config)
     end
   end
 
@@ -54,6 +65,15 @@ module Blockfrostruby
     end
   end
 
+  class IPFS < Net
+    include IPFSEndpoints
+
+    def initialize(project_id, config = {})
+      super
+      @url = IPFS_URL
+    end
+  end
+
   class Error < StandardError; end
-  # Check with unworking network
+  # TODO: Check with unworking network
 end
