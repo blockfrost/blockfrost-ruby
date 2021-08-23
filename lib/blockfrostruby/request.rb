@@ -17,13 +17,27 @@ module Request
 
     def post_request_cbor(url, project_id, body, params = {})
       url = add_params_to_url(url, params)
-      puts "URL: #{url}"
       uri = URI(url)
       req = Net::HTTP::Post.new(uri)
       req['project_id'] = project_id
       req['Content-Type'] = 'application/cbor'
       req.body = body
       Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
+    end
+
+    def post_file(url, project_id, filepath=nil)
+      # Or directory
+      puts url
+      uri = URI(url)
+      file = [['filename', File.open('./lib/blockfrostruby/version.rb')]]
+      #file.each_line { |line| puts line }
+      req = Net::HTTP::Post.new(uri)
+      req['project_id'] = project_id
+      req.set_form file, 'multipart/form-data'
+      #req['Content-Type'] = 'application/cbor'
+      # req.body = body
+      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
+      format_response(response)
     end
 
     private
