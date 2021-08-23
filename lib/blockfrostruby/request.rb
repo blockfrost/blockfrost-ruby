@@ -25,17 +25,14 @@ module Request
       Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
     end
 
-    def post_file(url, project_id, filepath=nil)
+    def post_file(url, project_id, new_filename, filepath)
       # Or directory
-      puts url
+      # puts url
       uri = URI(url)
-      file = [['filename', File.open('./lib/blockfrostruby/version.rb')]]
-      #file.each_line { |line| puts line }
+      file = [[new_filename, File.open(filepath)]] # ./lib/blockfrostruby/version.rb
       req = Net::HTTP::Post.new(uri)
       req['project_id'] = project_id
       req.set_form file, 'multipart/form-data'
-      #req['Content-Type'] = 'application/cbor'
-      # req.body = body
       response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
       format_response(response)
     end
