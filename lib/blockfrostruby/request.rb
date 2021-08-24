@@ -12,7 +12,6 @@ module Request
       req['project_id'] = project_id
       response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
       format_response(response)
-      # TODO: CHECK TIMEOUT ERROR
     end
 
     # TODO: Refactor post methods
@@ -36,7 +35,6 @@ module Request
       req.set_form file, 'multipart/form-data'
       response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
       format_response(response)
-      # TODO: check connection issue
     end
 
     def post_request_raw(url, project_id)
