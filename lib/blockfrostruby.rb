@@ -23,10 +23,12 @@ require_relative 'blockfrostruby/endpoints/cardano/pools_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/transactions_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/nutlink_endpoints'
 require_relative 'blockfrostruby/endpoints/ipfs/ipfs_endpoints'
+require_relative 'blockfrostruby/endpoints/custom_endpoints'
 
 module Blockfrostruby
   class Net
     include Configuration
+    include CustomEndpoints
 
     attr_reader :config, :project_id, :url
 
@@ -75,5 +77,4 @@ module Blockfrostruby
   end
 
   class Error < StandardError; end
-  # TODO: Check with unworking network
 end
