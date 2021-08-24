@@ -6,7 +6,7 @@ module Configuration
   class << self
     def default_config
       YAML.safe_load(
-        File.open('lib/blockfrostruby/config.yml').read
+        File.open("#{File.dirname(__FILE__)}/config.yml").read
       ).transform_keys(&:to_sym)
     end
 
