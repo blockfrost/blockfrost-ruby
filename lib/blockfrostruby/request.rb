@@ -23,7 +23,8 @@ module Request
       req['project_id'] = project_id
       req['Content-Type'] = 'application/cbor'
       req.body = body
-      Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
+      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
+      format_response(response)
     end
 
     def post_file(url, project_id, filepath)
@@ -48,7 +49,9 @@ module Request
     private
 
     def format_response(response)
-      body = response.header.content_type == 'application/json' ? JSON.parse(response.body) : response.body
+      content_type = response.header.content_type
+      able_to_parse = ['application/json', 'application/octet-stream'].include?(content_type)
+      body = able_to_parse ? JSON.parse(response.body) : response.body
       { status: response.code, body: body }
     end
 
