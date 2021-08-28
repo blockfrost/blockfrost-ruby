@@ -10,8 +10,7 @@ module Request
 
   class << self
     def get_response(url, project_id, params = {})
-      url = add_params_to_url(url, params)
-      uri = URI(url)
+      uri = URI(add_params_to_url(url, params))
       req = Net::HTTP::Get.new(uri)
       req['project_id'] = project_id
       req['User-Agent'] = sdk_identificator
@@ -22,8 +21,7 @@ module Request
     # TODO: Refactor post methods
 
     def post_request_cbor(url, project_id, body, params = {})
-      url = add_params_to_url(url, params)
-      uri = URI(url)
+      uri = URI(add_params_to_url(url, params))
       req = Net::HTTP::Post.new(uri)
       req['project_id'] = project_id
       req['Content-Type'] = 'application/cbor'
