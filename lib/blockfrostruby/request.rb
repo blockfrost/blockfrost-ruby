@@ -11,23 +11,25 @@ module Request
   class << self
     def get_response(url, project_id, params = {})
       uri = URI(add_params_to_url(url, params))
-      req = Net::HTTP::Get.new(uri)
-      req['project_id'] = project_id
-      req['User-Agent'] = sdk_identificator
-      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
+      request = base_get_request(uri, project_id)
+      response = send_request(uri, request)
       format_response(response)
     end
 
-    # TODO: Refactor post methods
+    def post_request_raw(url, project_id)
+      uri = URI(url)
+      request = base_post_request(uri, project_id)
+      request['Content-Type'] = 'text/plain'
+      response = send_request(uri, request)
+      format_response(response)
+    end
 
     def post_request_cbor(url, project_id, body, params = {})
       uri = URI(add_params_to_url(url, params))
-      req = Net::HTTP::Post.new(uri)
-      req['project_id'] = project_id
-      req['Content-Type'] = 'application/cbor'
-      req['User-Agent'] = sdk_identificator
-      req.body = body
-      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
+      request = base_post_request(uri, project_id)
+      request['Content-Type'] = 'application/cbor'
+      request.body = body
+      response = send_request(uri, request)
       format_response(response)
     end
 
@@ -35,21 +37,10 @@ module Request
       # Or directory
       uri = URI(url)
       file = [['upload', File.open(filepath)]]
-      req = Net::HTTP::Post.new(uri)
-      req['project_id'] = project_id
-      req['User-Agent'] = sdk_identificator
-      req.set_form file, 'multipart/form-data'
-      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
+      request = base_post_request(uri, project_id)
+      request.set_form file, 'multipart/form-data'
+      response = send_request(uri, request)
       format_response(response)
-    end
-
-    def post_request_raw(url, project_id)
-      uri = URI(url)
-      req = Net::HTTP::Post.new(uri)
-      req['project_id'] = project_id
-      req['Content-Type'] = 'text/plain'
-      req['User-Agent'] = sdk_identificator
-      Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
     end
 
     private
@@ -69,7 +60,25 @@ module Request
     end
 
     def sdk_identificator
-      "Blockfrost-Ruby, version: #{Blockfrostruby::VERSION} "
+      "Blockfrost-Ruby, version: #{Blockfrostruby::VERSION}"
+    end
+
+    def base_get_request(uri, project_id)
+      req = Net::HTTP::Get.new(uri)
+      req['project_id'] = project_id
+      req['User-Agent'] = sdk_identificator
+      req
+    end
+
+    def base_post_request(uri, project_id)
+      req = Net::HTTP::Post.new(uri)
+      req['project_id'] = project_id
+      req['User-Agent'] = sdk_identificator
+      req
+    end
+
+    def send_request(uri, req)
+      Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
     end
   end
 end
