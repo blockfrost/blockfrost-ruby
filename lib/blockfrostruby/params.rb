@@ -16,7 +16,7 @@ module Params
     private
 
     def extract_params(params)
-      params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to)
+      params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page)
     end
 
     def define_order(order_param, object_config)
@@ -56,5 +56,11 @@ module Params
       result = nil if result == default_config_value
       result
     end
+
+    # RAISE ERROR IF FROM AND TO NOT INT, NOT POSITIVE, FROM > TO
+    # RAISE ERROR IF COUNT * (TOPAGE - FROMPAGE) > CONSTANTS ARRAY SIZE
+    # DEFINE TO_PAGE IF FROM EXIST, BUT TO_PAGE NOT
+    # PREDICT ERRORS WITH USING IT WITH FROM TO
+    # AVOID USER TO USE FROM_PAGE WITH PAGE=
   end
 end

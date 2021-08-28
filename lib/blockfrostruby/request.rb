@@ -10,10 +10,24 @@ module Request
 
   class << self
     def get_response(url, project_id, params = {})
+      return get_pages(url, project_id, params) if params[:from_page]
+
       uri = URI(add_params_to_url(url, params))
       request = create_get_request(uri, project_id)
       response = send_request(uri, request)
       format_response(response)
+    end
+
+    def get_pages(url, project_id, params = {})
+      result = { status: nil, body: [] }
+      (params[:from_page]..params[:to_page]).each do |page_number|
+        params_to_pass = params.slice(:order, :count).merge(page: page_number)
+        response = get_response(url, project_id, params_to_pass)
+        result[:body] << response[:body]
+        result[:status] = response[:status]
+      end
+      result[:body] = result[:body].flatten
+      result
     end
 
     def post_request_raw(url, project_id)
@@ -34,7 +48,6 @@ module Request
     end
 
     def post_file(url, project_id, filepath)
-      # Or directory
       uri = URI(url)
       file = [['upload', File.open(filepath)]]
       request = create_post_request(uri, project_id)
