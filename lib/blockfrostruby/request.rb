@@ -18,13 +18,36 @@ module Request
       format_response(response)
     end
 
+    # To private
+
     def get_pages(url, project_id, params = {})
-      result = { status: nil, body: [] }
+      return get_pages_without_to_page(url, project_id, params) unless params[:to_page]
+
+      result = { status: nil, body: [] } # Refactor : split to 2: array<<, request
       (params[:from_page]..params[:to_page]).each do |page_number|
         params_to_pass = params.slice(:order, :count).merge(page: page_number)
         response = get_response(url, project_id, params_to_pass)
+        puts "#{page_number} #{response[:status]}"
         result[:body] << response[:body]
         result[:status] = response[:status]
+      end
+      result[:body] = result[:body].flatten
+      result
+    end
+
+    def get_pages_without_to_page(url, project_id, params = {})
+      result = { status: nil, body: [] }
+      page_number = params[:from_page]
+      loop do
+        params_to_pass = params.slice(:order, :count).merge(page: page_number)
+        response = get_response(url, project_id, params_to_pass)
+        puts "#{page_number} #{response[:status]}"
+        break if response[:body].empty?
+        break if page_number > 20
+
+        result[:body] << response[:body]
+        result[:status] = response[:status]
+        page_number += 1 # if the user pass wrong param
       end
       result[:body] = result[:body].flatten
       result
