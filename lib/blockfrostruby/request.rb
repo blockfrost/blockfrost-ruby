@@ -14,6 +14,9 @@ module Request
     end
 
     # To private
+    # if the user pass wrong param, string, not int, or less than from_page
+    # not from page, but with to page
+    # check with using from/to
 
     def get_response_from_page(url, project_id, params = {})
       uri = URI(add_params_to_url(url, params))
@@ -23,23 +26,56 @@ module Request
     end
 
     def get_pages(url, project_id, params = {})
-      result = { status: nil, body: [] }
+      responses = []
       page_number = params[:from_page]
       loop do
-        params_to_pass = params.slice(:order, :count).merge(page: page_number)
-        response = get_response_from_page(url, project_id, params_to_pass)
+        puts "page_number: #{page_number}"
+        response = get_answer(url, project_id, params, page_number)
 
-        break if response[:body].empty?
+        break if response.nil?
         break if params[:to_page] && (page_number >= params[:to_page])
 
-        result[:body] << response[:body]
-        result[:status] = response[:status]
-        page_number += 1 # if the user pass wrong param, string, not int, or less than from_page
-        # topage without from_page
+        responses << response
+        page_number += 1
       end
-      result[:body] = result[:body].flatten
+      format_pages_results(responses)
+    end
+
+    def get_answer(url, project_id, page_number, params = {})
+      params_to_pass = params.slice(:order, :count).merge(page: page_number)
+      response = get_response_from_page(url, project_id, params_to_pass)
+      return if response[:body].empty?
+
+      response
+    end
+
+    def format_pages_results(responses)
+      result = { status: nil, body: [] }
+      result[:body] = responses.flatten.map { |r| r[:body] }
+      result[:status] = responses.flatten.map { |r| r[:status] }[-1]
       result
     end
+
+    # def get_loop_response(params={}, method_or_block)
+    #   from = params[:from_page]
+    #   to = params[:to_page] || Float::Infinity
+    #   counter = params[:from_page]
+
+    #   loop do
+    #     yield # in method return if body nil
+    #     break if to >= counter
+    #   end
+
+    #   take method and call him before finish
+    # end
+
+    # def new_method
+    #   result = {}
+    #   loop do
+    #     result << do_something
+    #   end
+    #   result
+    # end
 
     def post_request_raw(url, project_id)
       uri = URI(url)
