@@ -10,23 +10,24 @@ module Request
 
   class << self
     def get_response(url, project_id, params = {})
-      return get_pages(url, project_id, params) if params[:from_page]
+      params[:from_page] ? get_pages(url, project_id, params) : get_response_from_page(url, project_id, params)
+    end
 
+    # To private
+
+    def get_response_from_page(url, project_id, params = {})
       uri = URI(add_params_to_url(url, params))
       request = create_get_request(uri, project_id)
       response = send_request(uri, request)
       format_response(response)
     end
 
-    # To private
-
     def get_pages(url, project_id, params = {})
       result = { status: nil, body: [] }
       page_number = params[:from_page]
       loop do
         params_to_pass = params.slice(:order, :count).merge(page: page_number)
-        response = get_response(url, project_id, params_to_pass)
-        puts "#{page_number} #{response[:status]}"
+        response = get_response_from_page(url, project_id, params_to_pass)
 
         break if response[:body].empty?
         break if params[:to_page] && (page_number >= params[:to_page])
@@ -34,6 +35,7 @@ module Request
         result[:body] << response[:body]
         result[:status] = response[:status]
         page_number += 1 # if the user pass wrong param, string, not int, or less than from_page
+        # topage without from_page
       end
       result[:body] = result[:body].flatten
       result
