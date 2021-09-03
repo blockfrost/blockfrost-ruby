@@ -2,9 +2,9 @@
 
 require_relative 'constants'
 
+# rubocop:disable Style/GuardClause, Metrics/ModuleLength
 module Validator
   class << self
-   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity,  Metrics/PerceivedComplexity, Style/GuardClause
     def validate_params(params)
       validate_count(params[:count])
       validate_page(params[:page])
@@ -13,9 +13,9 @@ module Validator
       validate_both_from_page_and_to_page(params[:from_page], params[:to_page])
 
       # TODO: think about
-      if (params[:from_page] || params[:to_page]) && params[:page] 
+      if (params[:from_page] || params[:to_page]) && params[:page]
         raise ArgumentError,
-                'Do not specify "page" with "to_page" or "from_page"'
+              'Do not specify "page" with "to_page" or "from_page"'
       end
     end
 
@@ -32,7 +32,7 @@ module Validator
     end
 
     def validate_page(param)
-      param_name = 'count'
+      param_name = 'page'
       if param
         validate_is_numeric(param, param_name)
         validate_is_integer(param, param_name)
@@ -50,7 +50,7 @@ module Validator
     end
 
     def validate_from(param)
-      param_value = 'from'
+      param_name = 'from'
       if param
         validate_is_numeric(param, param_name)
         validate_is_integer(param, param_name)
@@ -59,7 +59,7 @@ module Validator
     end
 
     def validate_to(param)
-      param_value = 'to'
+      param_name = 'to'
       if param
         validate_is_numeric(param, param_name)
         validate_is_integer(param, param_name)
@@ -75,7 +75,7 @@ module Validator
         validate_is_positive(param, param_name)
       end
     end
-    
+
     def validate_to_page(param)
       param_name = 'to_page'
       if param
@@ -91,13 +91,11 @@ module Validator
               '"to_page" argument should be specified with "from_page"'
       end
 
-      if from_page
-        validate_from_page(from_page)
-      end
+      validate_from_page(from_page) if from_page
 
       if from_page && to_page
         validate_to_page(to_page)
-        
+
         unless from_page <= to_page # TODO: refactor
           raise ArgumentError,
                 '"to_page" argument should be greater or equal than "from_page"'
@@ -108,14 +106,11 @@ module Validator
     def validate_both_from_and_to(from, to)
       validate_from(from)
       validate_to(to)
-      if from && to
-        unless from <= to
-          raise ArgumentError,
-                '"to" argument must be greater or equal than "from"'
-        end
+      if from && to && from > to
+        raise ArgumentError,
+              '"to" argument must be greater or equal than "from"'
       end
     end
-
 
     def validate_is_numeric(param, param_name)
       unless param.is_a?(Numeric)
@@ -165,6 +160,6 @@ module Validator
               "\"#{param_name}\" should be one of: #{array}"
       end
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Style/GuardClause
   end
 end
+# rubocop:enable Style/GuardClause, Metrics/ModuleLength

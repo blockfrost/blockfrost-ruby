@@ -6,7 +6,7 @@ require_relative 'validator'
 
 module Params
   include Configuration
-  include Validator 
+  include Validator
 
   class << self
     def define_params(params, config)
@@ -23,7 +23,6 @@ module Params
       params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page)
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity,  Metrics/PerceivedComplexity, Style/GuardClause
     # def validate_params(params)
     #   # From_page, to_page start
     #   if params[:to_page] && params[:from_page].nil?
@@ -50,7 +49,7 @@ module Params
     #     unless params[:order].is_a?(String)
     #       raise ArgumentError,
     #             '"order" argument is not a string'
-    #     end 
+    #     end
     #     unless %w[asc desc].include?(params[:order].downcase.strip)
     #       raise ArgumentError,
     #             '"order" argument should be "asc" or "desc"'
@@ -82,8 +81,6 @@ module Params
     #             '"page" argument must be greater than zero'
     #     end
     #   end
-      
-
 
     #   if params[:from]
     #     unless params[:from].is_a?(Numeric)
@@ -113,10 +110,8 @@ module Params
     #             '"to" argument must be greater or equal than "from"'
     #     end
     #   end
-      
-    # end
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Style/GuardClause
 
+    # end
     def define_order(order_param, object_config)
       default_config = Configuration.default_config
       order_in_default_config = default_config[:use_asc_order_as_default] == true ? 'asc' : 'desc'
