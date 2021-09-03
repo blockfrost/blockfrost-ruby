@@ -22,9 +22,20 @@ module Params
 
     def validate_params(params)
       raise ArgumentError, '"from_page" argument should be specified' if params[:to_page] && params[:from_page].nil?
-      raise ArgumentError, 'Argument is not numeric' unless (params[:from_page]&.is_a?(Numeric) && params[:to_page]&.is_a?(Numeric))
-      raise ArgumentError, 'Argument must be greater than zero' unless (params[:from_page] > 0 || params[:to_page] > 0)
-      raise ArgumentError, '"to_page" param should be greater than "from_page"' unless params[:from_page] < params[:to_page]
+
+      unless params[:from_page].is_a?(Numeric) && params[:to_page].is_a?(Numeric)
+        raise ArgumentError,
+              'Argument is not numeric'
+      end
+      unless (params[:from_page]).positive? && (params[:to_page]).positive?
+        raise ArgumentError,
+              'Argument must be greater than zero'
+      end
+
+      unless params[:from_page] <= params[:to_page]
+        raise ArgumentError,
+              '"to_page" param should be greater or equal than "from_page"'
+      end
     end
 
     def define_order(order_param, object_config)

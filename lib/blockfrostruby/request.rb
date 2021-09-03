@@ -95,7 +95,7 @@ module Request
         response = get_response_from_page(url, project_id, page_number, params)
 
         break if response.nil?
-        break if params[:to_page] && (page_number >= params[:to_page])
+        break if params[:to_page] && (page_number > params[:to_page])
 
         responses << response
         page_number += 1
@@ -113,7 +113,7 @@ module Request
 
     def format_pages_results(responses)
       result = { status: nil, body: [] }
-      result[:body] = responses.flatten.map { |r| r[:body] }
+      result[:body] = responses.flatten.map { |r| r[:body] }[0]
       result[:status] = responses.flatten.map { |r| r[:status] }[-1]
       result
     end
