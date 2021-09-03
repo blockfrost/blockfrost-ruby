@@ -5,58 +5,21 @@ require_relative 'constants'
 module Validator
   class << self
    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity,  Metrics/PerceivedComplexity, Style/GuardClause
-    def validate_is_numeric(param, param_name)
-      unless param.is_a?(Numeric)
+    def validate_params(params)
+      validate_count(params[:count])
+      validate_page(params[:page])
+      validate_order(params[:order])
+      validate_both_from_and_to(params[:from], params[:to])
+      validate_both_from_page_and_to_page(params[:from_page], params[:to_page])
+
+      # TODO: think about
+      if (params[:from_page] || params[:to_page]) && params[:page] 
         raise ArgumentError,
-              "\"#{param_name}\" is not a numeric"
+                'Do not specify "page" with "to_page" or "from_page"'
       end
     end
 
-    def validate_is_integer(param, param_name)
-      unless param.is_a?(Integer)
-        raise ArgumentError,
-              "\"#{param_name}\" is not an integer"
-      end
-    end
-
-    def validate_is_string(param, param_name)
-      unless param.is_a?(String)
-        raise ArgumentError,
-              "\"#{param_name}\" is not a string"
-      end
-    end
-
-    def validate_is_positive(param, param_name)
-      unless param.positive?
-        raise ArgumentError,
-              "\"#{param_name}\" should be greater than zero"
-      end
-    end
-
-    def validate_greater_or_equal_than(param, param_name, value)
-      unless param >= value
-        raise ArgumentError,
-              "\"#{param_name}\" should be greater or equal than #{value}"
-      end
-    end
-
-    def validate_lower_or_equal_than(param, param_name, value)
-      unless param <= value
-        raise ArgumentError,
-              "\"#{param_name}\" should be lower or equal than #{value}"
-      end
-    end
-
-    def validate_string_is_in_array(param, param_name, array)
-      unless array.include?(param.downcase.strip)
-        raise ArgumentError,
-              "\"#{param_name}\" should be one of: #{array}"
-      end
-    end
-
-
-
-    
+    private
 
     def validate_count(param)
       param_name = 'count'
@@ -153,18 +116,53 @@ module Validator
       end
     end
 
-   
-    def validate_params(params)
-      validate_count(params[:count])
-      validate_page(params[:page])
-      validate_order(params[:order])
-      validate_both_from_and_to(params[:from], params[:to])
-      validate_both_from_page_and_to_page(params[:from_page], params[:to_page])
 
-      # TODO: think about
-      if (params[:from_page] || params[:to_page]) && params[:page] 
+    def validate_is_numeric(param, param_name)
+      unless param.is_a?(Numeric)
         raise ArgumentError,
-                'Do not specify "page" with "to_page" or "from_page"'
+              "\"#{param_name}\" is not a numeric"
+      end
+    end
+
+    def validate_is_integer(param, param_name)
+      unless param.is_a?(Integer)
+        raise ArgumentError,
+              "\"#{param_name}\" is not an integer"
+      end
+    end
+
+    def validate_is_string(param, param_name)
+      unless param.is_a?(String)
+        raise ArgumentError,
+              "\"#{param_name}\" is not a string"
+      end
+    end
+
+    def validate_is_positive(param, param_name)
+      unless param.positive?
+        raise ArgumentError,
+              "\"#{param_name}\" should be greater than zero"
+      end
+    end
+
+    def validate_greater_or_equal_than(param, param_name, value)
+      unless param >= value
+        raise ArgumentError,
+              "\"#{param_name}\" should be greater or equal than #{value}"
+      end
+    end
+
+    def validate_lower_or_equal_than(param, param_name, value)
+      unless param <= value
+        raise ArgumentError,
+              "\"#{param_name}\" should be lower or equal than #{value}"
+      end
+    end
+
+    def validate_string_is_in_array(param, param_name, array)
+      unless array.include?(param.downcase.strip)
+        raise ArgumentError,
+              "\"#{param_name}\" should be one of: #{array}"
       end
     end
     # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Style/GuardClause
