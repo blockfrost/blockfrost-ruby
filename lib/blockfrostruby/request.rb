@@ -9,10 +9,6 @@ module Request
   include Blockfrostruby
 
   class << self
-    # if the user pass wrong param, string, not int, or less than from_page
-    # not from page, but with to page
-    # check with using from/to
-
     def get_response(url, project_id, params = {})
       params[:from_page] ? get_pages(url, project_id, params) : get_response_from_url(url, project_id, params)
     end
@@ -91,6 +87,7 @@ module Request
     def get_pages(url, project_id, params = {})
       responses = []
       page_number = params[:from_page]
+
       loop do
         response = get_response_from_page(url, project_id, page_number, params)
 
@@ -113,7 +110,7 @@ module Request
 
     def format_pages_results(responses)
       result = { status: nil, body: [] }
-      result[:body] = responses.flatten.map { |r| r[:body] }[0]
+      result[:body] = responses.map { |r| r[:body] }.flatten
       result[:status] = responses.flatten.map { |r| r[:status] }[-1]
       result
     end

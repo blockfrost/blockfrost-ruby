@@ -20,9 +20,12 @@ module Params
       params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page)
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Style/GuardClause
     def validate_params(params)
-      raise ArgumentError, '"from_page" argument should be specified' if params[:to_page] && params[:from_page].nil?
-
+      if params[:to_page] && params[:from_page].nil?
+        raise ArgumentError,
+              '"from_page" argument should be specified'
+      end
       unless params[:from_page].is_a?(Numeric) && params[:to_page].is_a?(Numeric)
         raise ArgumentError,
               'Argument is not numeric'
@@ -31,12 +34,12 @@ module Params
         raise ArgumentError,
               'Argument must be greater than zero'
       end
-
       unless params[:from_page] <= params[:to_page]
         raise ArgumentError,
               '"to_page" param should be greater or equal than "from_page"'
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Style/GuardClause
 
     def define_order(order_param, object_config)
       default_config = Configuration.default_config
@@ -76,9 +79,6 @@ module Params
       result
     end
 
-    # RAISE ERROR IF FROM AND TO NOT INT, NOT POSITIVE, FROM > TO
-    # RAISE ERROR IF COUNT * (TOPAGE - FROMPAGE) > CONSTANTS ARRAY SIZE
-    # DEFINE TO_PAGE IF FROM_PAGE EXIST, BUT TO_PAGE NOT
     # PREDICT ERRORS WITH USING IT WITH FROM TO
     # AVOID USER TO USE FROM_PAGE WITH PAGE=
   end
