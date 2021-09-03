@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'configuration'
+require_relative 'constants'
 
 module Params
   include Configuration
@@ -20,26 +21,62 @@ module Params
       params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page)
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Style/GuardClause
+    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity,  Metrics/PerceivedComplexity, Style/GuardClause
     def validate_params(params)
+      # From_page, to_page start
       if params[:to_page] && params[:from_page].nil?
         raise ArgumentError,
-              '"from_page" argument should be specified'
+              '"from_page" argument should be specified with "to_page"'
       end
-      unless params[:from_page].is_a?(Numeric) && params[:to_page].is_a?(Numeric)
-        raise ArgumentError,
-              'Argument is not numeric'
+      if params[:from_page] && params[:to_page]
+        unless params[:from_page].is_a?(Numeric) && params[:to_page].is_a?(Numeric) # Split
+          raise ArgumentError,
+                'Argument is not a numeric' # Specify
+        end
+        unless (params[:from_page]).positive? && (params[:to_page]).positive?  # Split
+          raise ArgumentError,
+                'Argument must be greater than zero' # Specify
+        end
+        unless params[:from_page] <= params[:to_page]
+          raise ArgumentError,
+                '"to_page" argument should be greater or equal than "from_page"'
+        end
       end
-      unless (params[:from_page]).positive? && (params[:to_page]).positive?
-        raise ArgumentError,
-              'Argument must be greater than zero'
+      # From_page, to_page end
+
+      if params[:order]
+        unless params[:order].is_a?(String)
+          raise ArgumentError,
+                '"order" argument is not a string'
+        end 
+        unless %w[asc desc].include?(params[:order].downcase.strip)
+          raise ArgumentError,
+                '"order" argument should be "asc" or "desc"'
+        end
       end
-      unless params[:from_page] <= params[:to_page]
-        raise ArgumentError,
-              '"to_page" param should be greater or equal than "from_page"'
+
+      if params[:count]
+        unless params[:count].is_a?(Numeric)
+          raise ArgumentError,
+                '"count" argument is not numeric'
+        end
+        unless params[:count].positive?
+          raise ArgumentError,
+                '"count" argument must be greater than zero'
+        end
+        unless params[:count] <= MAX_COUNT_PER_PAGE
+          raise ArgumentError,
+                "\"count\" argument must be lower or equal to #{MAX_COUNT_PER_PAGE}"
+        end
       end
+
+      # if params[:page]
+      # if params[:from]
+      # if params[:to]
+      # params from page to page and from to
+
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Style/GuardClause
+    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Style/GuardClause
 
     def define_order(order_param, object_config)
       default_config = Configuration.default_config
