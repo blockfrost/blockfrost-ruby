@@ -70,6 +70,48 @@ module Params
         end
       end
 
+      if params[:page]
+        unless params[:page].is_a?(Numeric)
+          raise ArgumentError,
+                '"page" argument is not numeric'
+        end
+        unless params[:page].positive?
+          raise ArgumentError,
+                '"page" argument must be greater than zero'
+        end
+      end
+      
+
+
+      if params[:from]
+        unless params[:from].is_a?(Numeric)
+          raise ArgumentError,
+                '"from" argument is not numeric'
+        end
+        unless params[:from].positive?
+          raise ArgumentError,
+                '"from" argument must be greater than zero'
+        end
+      end
+
+      if params[:to]
+        unless params[:to].is_a?(Numeric)
+          raise ArgumentError,
+                '"to" argument is not numeric'
+        end
+        unless params[:to].positive?
+          raise ArgumentError,
+                '"to" argument must be greater than zero'
+        end
+      end
+
+      if params[:from] && params[:to]
+        unless params[:from] <= params[:to]
+          raise ArgumentError,
+                '"to" argument must be greater or equal than "from"'
+        end
+      end
+      
       # if params[:page]
       # if params[:from]
       # if params[:to]
