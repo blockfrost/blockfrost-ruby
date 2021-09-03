@@ -12,6 +12,13 @@ module Validator
       end
     end
 
+    def validate_is_integer(param, param_name)
+      unless param.is_a?(Integer)
+        raise ArgumentError,
+              "\"#{param_name}\" is not an integer"
+      end
+    end
+
     def validate_is_string(param, param_name)
       unless param.is_a?(String)
         raise ArgumentError,
@@ -40,119 +47,121 @@ module Validator
       end
     end
 
-    def validate_value_in_array(param, param_name, array)
+    def validate_string_is_in_array(param, param_name, array)
+      unless array.include?(param.downcase.strip)
+        raise ArgumentError,
+              "\"#{param_name}\" should be one of: #{array}"
+      end
     end
 
 
-    def validate_from_page
+
+    
+
+    def validate_count(param)
+      param_name = 'count'
+      if param
+        validate_is_numeric(param, param_name)
+        validate_is_integer(param, param_name)
+        validate_is_positive(param, param_name)
+        validate_lower_or_equal_than(param, param_name, MAX_COUNT_PER_PAGE)
+      end
+    end
+
+    def validate_page(param)
+      param_name = 'count'
+      if param
+        validate_is_numeric(param, param_name)
+        validate_is_integer(param, param_name)
+        validate_is_positive(param, param_name)
+      end
+    end
+
+    def validate_order(param)
+      param_name = 'order'
+      valid_values = %w[asc desc]
+      if param
+        validate_is_string(param, param_name)
+        validate_string_is_in_array(param, param_name, valid_values)
+      end
+    end
+
+    def validate_from(param)
+      param_value = 'from'
+      if param
+        validate_is_numeric(param, param_name)
+        validate_is_integer(param, param_name)
+        validate_is_positive(param, param_name)
+      end
+    end
+
+    def validate_to(param)
+      param_value = 'to'
+      if param
+        validate_is_numeric(param, param_name)
+        validate_is_integer(param, param_name)
+        validate_is_positive(param, param_name)
+      end
+    end
+
+    def validate_from_page(param)
+      param_name = 'from_page'
+      if param
+        validate_is_numeric(param, param_name)
+        validate_is_integer(param, param_name)
+        validate_is_positive(param, param_name)
+      end
     end
     
-    def validate_to_page
+    def validate_to_page(param)
+      param_name = 'to_page'
+      if param
+        validate_is_numeric(param, param_name)
+        validate_is_integer(param, param_name)
+        validate_is_positive(param, param_name)
+      end
     end
 
-    def validate_count(count)
-      count_name = 'count'
-      if count
-        validate_is_numeric(count, count_name)
-        validate_is_positive(count, count_name)
-        validate_lower_or_equal_than(count, count_name, MAX_COUNT_PER_PAGE)
+    def validate_both_from_page_and_to_page(from_page, to_page)
+      if to_page && from_page.nil? # TODO: refactor
+        raise ArgumentError,
+              '"to_page" argument should be specified with "from_page"'
+      end
+
+      if from_page
+        validate_from_page(from_page)
+      end
+
+      if from_page && to_page
+        validate_to_page(to_page)
+        
+        unless from_page <= to_page # TODO: refactor
+          raise ArgumentError,
+                '"to_page" argument should be greater or equal than "from_page"'
+        end
+      end
+    end
+
+    def validate_both_from_and_to(from, to)
+      validate_from(from)
+      validate_to(to)
+      if from && to
+        unless from <= to
+          raise ArgumentError,
+                '"to" argument must be greater or equal than "from"'
+        end
       end
     end
 
    
     def validate_params(params)
-      # From_page, to_page start
-      if params[:to_page] && params[:from_page].nil?
-        raise ArgumentError,
-              '"to_page" argument should be specified with "from_page"'
-      end
-      if params[:from_page] && params[:to_page]
-        unless params[:from_page].is_a?(Numeric) && params[:to_page].is_a?(Numeric) # Split
-          raise ArgumentError,
-                'Argument is not a numeric' # Specify
-        end
-        unless (params[:from_page]).positive? && (params[:to_page]).positive?  # Split
-          raise ArgumentError,
-                'Argument should be greater than zero' # Specify
-        end
-        unless params[:from_page] <= params[:to_page]
-          raise ArgumentError,
-                '"to_page" argument should be greater or equal than "from_page"'
-        end
-      end
-      # From_page, to_page end
-
-      if params[:order]
-        unless params[:order].is_a?(String)
-          raise ArgumentError,
-                '"order" argument is not a string'
-        end 
-        unless %w[asc desc].include?(params[:order].downcase.strip)
-          raise ArgumentError,
-                '"order" argument should be "asc" or "desc"'
-        end
-      end
-
       validate_count(params[:count])
-      
-      # if params[:count]
-      #   validate_is_numeric(params[:count], 'count')
-      #   # unless params[:count].is_a?(Numeric)
-      #   #   raise ArgumentError,
-      #   #         '"count" argument is not numeric'
-      #   # end
-      #   unless params[:count].positive?
-      #     raise ArgumentError,
-      #           '"count" argument must be greater than zero'
-      #   end
-      #   unless params[:count] <= MAX_COUNT_PER_PAGE
-      #     raise ArgumentError,
-      #           "\"count\" argument must be lower or equal to #{MAX_COUNT_PER_PAGE}"
-      #   end
-      # end
+      validate_page(params[:page])
+      validate_order(params[:order])
+      validate_both_from_and_to(params[:from], params[:to])
+      validate_both_from_page_and_to_page(params[:from_page], params[:to_page])
 
-      if params[:page]
-        unless params[:page].is_a?(Numeric)
-          raise ArgumentError,
-                '"page" argument is not numeric'
-        end
-        unless params[:page].positive?
-          raise ArgumentError,
-                '"page" argument must be greater than zero'
-        end
-      end
-      
-
-
-      if params[:from]
-        unless params[:from].is_a?(Numeric)
-          raise ArgumentError,
-                '"from" argument is not numeric'
-        end
-        unless params[:from].positive?
-          raise ArgumentError,
-                '"from" argument must be greater than zero'
-        end
-      end
-
-      if params[:to]
-        unless params[:to].is_a?(Numeric)
-          raise ArgumentError,
-                '"to" argument is not numeric'
-        end
-        unless params[:to].positive?
-          raise ArgumentError,
-                '"to" argument must be greater than zero'
-        end
-      end
-
-      if params[:from] && params[:to]
-        unless params[:from] <= params[:to]
-          raise ArgumentError,
-                '"to" argument must be greater or equal than "from"'
-        end
-      end
-
+      # TODO: think about
       if (params[:from_page] || params[:to_page]) && params[:page] 
         raise ArgumentError,
                 'Do not specify "page" with "to_page" or "from_page"'
