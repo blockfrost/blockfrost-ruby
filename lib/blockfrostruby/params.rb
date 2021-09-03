@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
 require_relative 'configuration'
+require_relative 'constants'
+require_relative 'validator'
 
 module Params
   include Configuration
+  include Validator
 
   class << self
     def define_params(params, config)
       result = extract_params(params)
+      Validator.validate_params(result)
       result[:order] = define_order(result[:order], config)
       result[:count] = define_count(result[:count], config)
       result.compact
@@ -16,9 +20,98 @@ module Params
     private
 
     def extract_params(params)
-      params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to)
+      params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page)
     end
 
+    # def validate_params(params)
+    #   # From_page, to_page start
+    #   if params[:to_page] && params[:from_page].nil?
+    #     raise ArgumentError,
+    #           '"from_page" argument should be specified with "to_page"'
+    #   end
+    #   if params[:from_page] && params[:to_page]
+    #     unless params[:from_page].is_a?(Numeric) && params[:to_page].is_a?(Numeric) # Split
+    #       raise ArgumentError,
+    #             'Argument is not a numeric' # Specify
+    #     end
+    #     unless (params[:from_page]).positive? && (params[:to_page]).positive?  # Split
+    #       raise ArgumentError,
+    #             'Argument must be greater than zero' # Specify
+    #     end
+    #     unless params[:from_page] <= params[:to_page]
+    #       raise ArgumentError,
+    #             '"to_page" argument should be greater or equal than "from_page"'
+    #     end
+    #   end
+    #   # From_page, to_page end
+
+    #   if params[:order]
+    #     unless params[:order].is_a?(String)
+    #       raise ArgumentError,
+    #             '"order" argument is not a string'
+    #     end
+    #     unless %w[asc desc].include?(params[:order].downcase.strip)
+    #       raise ArgumentError,
+    #             '"order" argument should be "asc" or "desc"'
+    #     end
+    #   end
+
+    #   if params[:count]
+    #     unless params[:count].is_a?(Numeric)
+    #       raise ArgumentError,
+    #             '"count" argument is not numeric'
+    #     end
+    #     unless params[:count].positive?
+    #       raise ArgumentError,
+    #             '"count" argument must be greater than zero'
+    #     end
+    #     unless params[:count] <= MAX_COUNT_PER_PAGE
+    #       raise ArgumentError,
+    #             "\"count\" argument must be lower or equal to #{MAX_COUNT_PER_PAGE}"
+    #     end
+    #   end
+
+    #   if params[:page]
+    #     unless params[:page].is_a?(Numeric)
+    #       raise ArgumentError,
+    #             '"page" argument is not numeric'
+    #     end
+    #     unless params[:page].positive?
+    #       raise ArgumentError,
+    #             '"page" argument must be greater than zero'
+    #     end
+    #   end
+
+    #   if params[:from]
+    #     unless params[:from].is_a?(Numeric)
+    #       raise ArgumentError,
+    #             '"from" argument is not numeric'
+    #     end
+    #     unless params[:from].positive?
+    #       raise ArgumentError,
+    #             '"from" argument must be greater than zero'
+    #     end
+    #   end
+
+    #   if params[:to]
+    #     unless params[:to].is_a?(Numeric)
+    #       raise ArgumentError,
+    #             '"to" argument is not numeric'
+    #     end
+    #     unless params[:to].positive?
+    #       raise ArgumentError,
+    #             '"to" argument must be greater than zero'
+    #     end
+    #   end
+
+    #   if params[:from] && params[:to]
+    #     unless params[:from] <= params[:to]
+    #       raise ArgumentError,
+    #             '"to" argument must be greater or equal than "from"'
+    #     end
+    #   end
+
+    # end
     def define_order(order_param, object_config)
       default_config = Configuration.default_config
       order_in_default_config = default_config[:use_asc_order_as_default] == true ? 'asc' : 'desc'
@@ -56,5 +149,8 @@ module Params
       result = nil if result == default_config_value
       result
     end
+
+    # PREDICT ERRORS WITH USING IT WITH FROM TO
+    # AVOID USER TO USE FROM_PAGE WITH PAGE=
   end
 end
