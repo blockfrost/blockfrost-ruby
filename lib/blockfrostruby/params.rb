@@ -8,6 +8,7 @@ module Params
   class << self
     def define_params(params, config)
       result = extract_params(params)
+      validate_params(result)
       result[:order] = define_order(result[:order], config)
       result[:count] = define_count(result[:count], config)
       result.compact
@@ -17,6 +18,13 @@ module Params
 
     def extract_params(params)
       params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page)
+    end
+
+    def validate_params(params)
+      raise ArgumentError, '"from_page" argument should be specified' if params[:to_page] && params[:from_page].nil?
+      raise ArgumentError, 'Argument is not numeric' unless (params[:from_page]&.is_a?(Numeric) && params[:to_page]&.is_a?(Numeric))
+      raise ArgumentError, 'Argument must be greater than zero' unless (params[:from_page] > 0 || params[:to_page] > 0)
+      raise ArgumentError, '"to_page" param should be greater than "from_page"' unless params[:from_page] < params[:to_page]
     end
 
     def define_order(order_param, object_config)
@@ -59,7 +67,7 @@ module Params
 
     # RAISE ERROR IF FROM AND TO NOT INT, NOT POSITIVE, FROM > TO
     # RAISE ERROR IF COUNT * (TOPAGE - FROMPAGE) > CONSTANTS ARRAY SIZE
-    # DEFINE TO_PAGE IF FROM EXIST, BUT TO_PAGE NOT
+    # DEFINE TO_PAGE IF FROM_PAGE EXIST, BUT TO_PAGE NOT
     # PREDICT ERRORS WITH USING IT WITH FROM TO
     # AVOID USER TO USE FROM_PAGE WITH PAGE=
   end
