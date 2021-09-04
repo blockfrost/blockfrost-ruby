@@ -12,7 +12,7 @@ module Validator
       validate_both_from_and_to(params[:from], params[:to])
       validate_both_from_page_and_to_page(params[:from_page], params[:to_page])
 
-      # TODO: think about
+      # TODO: think about using it
       if (params[:from_page] || params[:to_page]) && params[:page]
         raise ArgumentError,
               'Do not specify "page" with "to_page" or "from_page"'
@@ -91,9 +91,9 @@ module Validator
               '"to_page" argument should be specified with "from_page"'
       end
 
-      validate_from_page(from_page) if from_page
+      validate_from_page(from_page) if from_page # Think about if
 
-      if from_page && to_page
+      if from_page && to_page # Think about if
         validate_to_page(to_page)
 
         unless from_page <= to_page # TODO: refactor
@@ -111,6 +111,8 @@ module Validator
               '"to" argument must be greater or equal than "from"'
       end
     end
+
+    # Can be moved to Validations module
 
     def validate_is_numeric(param, param_name)
       unless param.is_a?(Numeric)
