@@ -10,7 +10,7 @@ module Request
 
   class << self
     def get_response(url, project_id, params = {})
-      params[:from_page] ? get_pages(url, project_id, params) : get_response_from_url(url, project_id, params)
+      params[:from_page] ? get_pages_multi(url, project_id, params) : get_response_from_url(url, project_id, params)
     end
 
     def post_request_raw(url, project_id)
@@ -89,6 +89,7 @@ module Request
       page_number = params[:from_page]
 
       loop do
+        # with yield
         response = get_response_from_page(url, project_id, page_number, params)
 
         break if response.nil?
@@ -100,8 +101,89 @@ module Request
       format_pages_results(responses)
     end
 
+    def get_pages_multi(url, project_id, params = {}, thr_count=5)
+      responses = []
+      page_number = params[:from_page]
+      threads = []
+      stope = false
+      mutex = Mutex.new
+      loop do
+        puts "page number loop: #{page_number}"
+        
+        thr_count.times do |i|
+          #mutex.synchronize do  
+          threads << Thread.new(page_number) do 
+            puts "number thread: #{page_number + i}"
+          response = get_response_from_page(url, project_id, page_number+i, params)
+          
+          stope = true if response.nil? 
+          stope = true if params[:to_page] && (page_number > params[:to_page])
+          next if response.nil?
+          next if params[:to_page] && (page_number > params[:to_page])
+
+          responses << response
+          page_number += 1
+          #number +=1
+          #end
+          end
+        end
+
+          # threads << Thread.new(page_number) do |number|
+          # puts "number thread: #{number}"
+          # response = get_response_from_page(url, project_id, number, params)
+          
+          # stope = true if response.nil? 
+          # stope = true if params[:to_page] && (page_number > params[:to_page])
+          # next if response.nil?
+          # next if params[:to_page] && (page_number > params[:to_page])
+
+          # responses << response
+          # page_number += 1
+        # end
+        threads.each { |thr| thr.join }
+        break if params[:to_page] && (page_number > params[:to_page])
+        break if stope == true
+      end
+      
+      #format_pages_results(responses)
+    end
+
+
+    # def get_exp(url, project_id, params = {})
+    # responses = []
+    # page_number = params[:from_page]
+    # threads = []
+    # loop do |page_number|
+    #   puts "page number loop: #{page_number}"
+    #   yield page_number
+
+      
+      
+    #   break if params[:to_page] && (page_number > params[:to_page])
+    # end
+    # # threads.each { |thr| thr.join }
+    # format_pages_results(responses)
+    # end
+
+    # def call(url, project_id, params = {})
+    # threads << Thread.new(page_number) do |number|
+    #   puts "number thread: #{number}"
+    #   response = get_response_from_page(url, project_id, number, params)
+
+    #   break if response.nil?
+    #   break if params[:to_page] && (page_number > params[:to_page])
+
+    #   responses << response
+    #   page_number += 1
+    # end
+    # end
+
+
+
+
+
     def get_response_from_page(url, project_id, page_number, params = {})
-      params_to_pass = params.slice(:order, :count).merge(page: page_number)
+      params_to_pass = params.slice(:order, :count).merge(page: page_number) # Why slice here?
       response = get_response_from_url(url, project_id, params_to_pass)
       return if response[:body].empty?
 
