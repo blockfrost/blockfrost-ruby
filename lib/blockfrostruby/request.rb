@@ -89,7 +89,6 @@ module Request
       page_number = params[:from_page]
 
       loop do
-        # with yield
         response = get_response_from_page(url, project_id, page_number, params)
 
         break if response.nil?
@@ -101,15 +100,17 @@ module Request
       format_pages_results(responses)
     end
 
-    def get_pages_multi(url, project_id, params = {}, thr_count = 5)
+    def get_pages_multi(url, project_id, params = {})
+      parallel_requests = 10
       responses = []
       page_number = params[:from_page]
       threads = []
       stope = false
       loop do
-        thr_count.times do |i|
-
+        puts "LOOP page_number: #{page_number}"
+        parallel_requests.times do |i|
           threads << Thread.new(page_number) do
+            puts "thread page_number: #{page_number}"
             response = get_response_from_page(url, project_id, page_number + i, params)
 
             stope = true if response.nil?
