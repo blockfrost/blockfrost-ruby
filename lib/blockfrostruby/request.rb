@@ -106,15 +106,20 @@ module Request
       responses = []
       page_number = params[:from_page]
       threads = []
+      # numbers = []
       stope = false
       loop do
         parallel_requests.times do |i|
           threads << Thread.new(page_number) do
+            stope = true if params[:to_page] && (page_number + i > params[:to_page])
+            next if params[:to_page] && (page_number + i > params[:to_page])
+
+            # numbers << page_number + i
             response = get_response_from_page(url, project_id, page_number + i, params)
             stope = true if response.nil?
-            stope = true if params[:to_page] && (page_number > params[:to_page])
+            
             next if response.nil?
-            next if params[:to_page] && (page_number > params[:to_page])
+            
 
             responses << response
             page_number += 1
@@ -125,6 +130,7 @@ module Request
         break if params[:to_page] && (page_number > params[:to_page])
         break if stope == true
       end
+      #numbers.sort
       format_pages_results(responses)
     end
 
