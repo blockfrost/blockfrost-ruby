@@ -34,7 +34,13 @@ module BlocksEndpoints
   # Example: 5ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a
   def get_list_of_next_blocks(hash_or_number, params = {})
     params = Params.define_params(params, @config)
-    Request.get_response("#{@url}/blocks/#{hash_or_number}/next", @project_id, params)
+    # Request.get_response("#{@url}/blocks/#{hash_or_number}/next", @project_id, params)
+    Request.get_pages("#{@url}/blocks/#{hash_or_number}/next", @project_id, params)
+  end
+
+  def get_list_of_next_blocks_2(hash_or_number, params = {})
+    params = Params.define_params(params, @config)
+    Request.get_pages_multi("#{@url}/blocks/#{hash_or_number}/next", @project_id, params)
   end
 
   def get_list_of_previous_blocks(hash_or_number, params = {})

@@ -39,7 +39,7 @@ module Request
       format_response(response)
     end
 
-    private
+    # private
 
     def format_response(response)
       content_type = response.header.content_type
@@ -53,6 +53,7 @@ module Request
       return url if sliced_params.empty?
 
       request_params = sliced_params.map { |k, v| "#{k}=#{v}" }.join('&')
+      puts "#{url}?#{request_params}"
       "#{url}?#{request_params}"
     end
 
@@ -90,11 +91,12 @@ module Request
       page_number = params[:from_page]
 
       loop do
+        break if params[:to_page] && (page_number > params[:to_page])
+
         response = get_response_from_page(url, project_id, page_number, params)
 
         break if response.nil?
-        break if params[:to_page] && (page_number > params[:to_page])
-
+        
         responses << response
         page_number += 1
       end
