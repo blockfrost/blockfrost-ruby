@@ -108,11 +108,9 @@ module Request
       threads = []
       stope = false
       loop do
-        puts "LOOP page_number: #{page_number}"
         parallel_requests.times do |i|
           threads << Thread.new(page_number) do
             response = get_response_from_page(url, project_id, page_number + i, params)
-            puts "thread page_number: #{page_number+i}"
             stope = true if response.nil?
             stope = true if params[:to_page] && (page_number > params[:to_page])
             next if response.nil?
@@ -127,8 +125,7 @@ module Request
         break if params[:to_page] && (page_number > params[:to_page])
         break if stope == true
       end
-      nil
-      #format_pages_results(responses)
+      format_pages_results(responses)
     end
 
     def get_response_from_page(url, project_id, page_number, params = {})
