@@ -21,8 +21,8 @@ module Request
       format_response(response)
     end
 
-    def post_request_cbor(url, project_id, body, params = {})
-      uri = URI(add_params_to_url(url, params))
+    def post_request_cbor(url, project_id, body)
+      uri = URI(url)
       request = create_post_request(uri, project_id)
       request['Content-Type'] = 'application/cbor'
       request.body = body
@@ -49,9 +49,10 @@ module Request
     end
 
     def add_params_to_url(url, params)
-      return url if params.empty?
+      sliced_params = params.slice(:order, :page, :count, :from, :to).compact
+      return url if sliced_params.empty?
 
-      request_params = params.map { |k, v| "#{k}=#{v}" }.join('&')
+      request_params = sliced_params.map { |k, v| "#{k}=#{v}" }.join('&')
       "#{url}?#{request_params}"
     end
 
@@ -101,7 +102,7 @@ module Request
     end
 
     def get_pages_multi(url, project_id, params = {})
-      parallel_requests = 10
+      parallel_requests = params[:parallel_requests]
       responses = []
       page_number = params[:from_page]
       threads = []
@@ -110,9 +111,8 @@ module Request
         puts "LOOP page_number: #{page_number}"
         parallel_requests.times do |i|
           threads << Thread.new(page_number) do
-            puts "thread page_number: #{page_number}"
             response = get_response_from_page(url, project_id, page_number + i, params)
-
+            puts "thread page_number: #{page_number+i}"
             stope = true if response.nil?
             stope = true if params[:to_page] && (page_number > params[:to_page])
             next if response.nil?
@@ -127,8 +127,8 @@ module Request
         break if params[:to_page] && (page_number > params[:to_page])
         break if stope == true
       end
-
-      format_pages_results(responses)
+      nil
+      #format_pages_results(responses)
     end
 
     def get_response_from_page(url, project_id, page_number, params = {})

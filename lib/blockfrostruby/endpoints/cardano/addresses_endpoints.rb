@@ -26,6 +26,4 @@ module AddressesEndpoints
     params = Params.define_params(params, @config)
     Request.get_response("#{@url}/addresses/#{address}/transactions", @project_id, params)
   end
-
-  # METHODS WITH GET ALL
 end

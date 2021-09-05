@@ -55,6 +55,4 @@ module PoolsEndpoints
     params = Params.define_params(params, @config)
     Request.get_response("#{@url}/pools/#{pool_id}/updates", @project_id, params)
   end
-
-  # METHODS WITH GET ALL
 end

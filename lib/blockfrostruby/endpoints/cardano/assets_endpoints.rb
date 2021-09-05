@@ -38,6 +38,4 @@ module AssetsEndpoints
     params = Params.define_params(params, @config)
     Request.get_response("#{@url}/assets/policy/#{policy_id}", @project_id, params)
   end
-
-  # METHODS WITH GET ALL
 end

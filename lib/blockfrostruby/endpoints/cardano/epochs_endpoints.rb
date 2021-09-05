@@ -56,6 +56,4 @@ module EpochsEndpoints
   def get_epoch_parameters(epoch_number)
     Request.get_response("#{@url}/epochs/#{epoch_number}/parameters", @project_id)
   end
-
-  # METHODS WITH GET ALL
 end
