@@ -96,7 +96,7 @@ module Request
         response = get_response_from_page(url, project_id, page_number, params)
 
         break if response.nil?
-        
+
         responses << response
         page_number += 1
       end
@@ -118,7 +118,7 @@ module Request
             next if params[:to_page] && (local_page_number > params[:to_page])
 
             response = get_response_from_page(url, project_id, local_page_number, params)
-            
+
             stops = true if response.nil?
             next if response.nil?
 
@@ -131,7 +131,7 @@ module Request
         break if params[:to_page] && (page_number > params[:to_page])
         break if stops == true
       end
-      responses.sort!{|el1, el2| el1[:page_number]<=>el2[:page_number]}.map!{|el| el[:response]}
+      responses.sort! { |el1, el2| el1[:page_number] <=> el2[:page_number] }.map! { |el| el[:response] }
       format_pages_results(responses)
     end
 

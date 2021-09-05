@@ -12,7 +12,7 @@ module Validator
       validate_both_from_and_to(params[:from], params[:to])
       validate_both_from_page_and_to_page(params[:from_page], params[:to_page])
       validate_parallel_requests(params[:parallel_requests])
-      
+
       # TODO: think about using it
       if (params[:from_page] || params[:to_page]) && params[:page]
         raise ArgumentError,
@@ -21,7 +21,7 @@ module Validator
     end
 
     def validate_init_params(config)
-      validate_count(config[:default_count_per_page]) #init count
+      validate_count(config[:default_count_per_page]) # init count
       validate_use_order(config[:use_asc_order_as_default])
       validate_parallel_requests(config[:parallel_requests])
     end
@@ -30,9 +30,7 @@ module Validator
 
     def validate_use_order(param)
       param_name = 'use_asc_order_as_default'
-      if param
-        validate_is_boolean(param, param_name)
-      end
+      validate_is_boolean(param, param_name) if param
     end
 
     def validate_parallel_requests(param)
@@ -135,15 +133,6 @@ module Validator
       end
     end
 
-    def validate_parallel_requests(param)
-      param_name = 'parallel_requests'
-      if param
-        validate_is_numeric(param, param_name)
-        validate_is_integer(param, param_name)
-        validate_is_positive(param, param_name)
-      end
-    end
-
     # Can be moved to Validations module
 
     def validate_is_numeric(param, param_name)
@@ -161,7 +150,7 @@ module Validator
     end
 
     def validate_is_boolean(param, param_name)
-      unless (param.is_a?(True) || param.is_a?(False))
+      unless param.is_a?(True) || param.is_a?(False)
         raise ArgumentError,
               "\"#{param_name}\" is not a true or a false"
       end

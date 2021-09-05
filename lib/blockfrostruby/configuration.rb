@@ -5,7 +5,7 @@ require_relative './validator'
 
 module Configuration
   include Validator
-  
+
   class << self
     def default_config
       YAML.safe_load(
