@@ -39,7 +39,7 @@ module Request
       format_response(response)
     end
 
-    # private
+    private
 
     def format_response(response)
       content_type = response.header.content_type
@@ -113,17 +113,16 @@ module Request
         parallel_requests.times do |i|
           threads << Thread.new(page_number) do
             local_page_number = page_number + i
+
             stops = true if params[:to_page] && (local_page_number > params[:to_page])
             next if params[:to_page] && (local_page_number > params[:to_page])
 
-            # numbers << local_page_number
             response = get_response_from_page(url, project_id, local_page_number, params)
             
             stops = true if response.nil?
             next if response.nil?
 
-            #puts "page_number here: #{local_page_number}"
-            responses << {page_number: local_page_number, response: response}
+            responses << { page_number: local_page_number, response: response }
             page_number += 1
           end
         end
@@ -133,9 +132,7 @@ module Request
         break if stops == true
       end
       responses.sort!{|el1, el2| el1[:page_number]<=>el2[:page_number]}.map!{|el| el[:response]}
-      #numbers.sort
       format_pages_results(responses)
-      #nil
     end
 
     def get_response_from_page(url, project_id, page_number, params = {})
