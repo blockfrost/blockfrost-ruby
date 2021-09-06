@@ -25,21 +25,6 @@ And run next commands:
 
 That's it! You may use the gem in your projects.
 
-<!--
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'blockfrostruby'
-```
-
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install blockfrostruby -->
-
 ## Usage
 
 To use this SDK, you first need login into blockfrost.io and create your project to retrieve your API token.
@@ -59,13 +44,16 @@ blockfrost.get_transaction('f6780212...36f0c20b6')
 # {:status=>"404", :body=>{"status_code"=>404, "error"=>"Not Found", "message"=>"The requested component has not been found."}}
 
 # Requests which returns a list of result can be called with params.
-# Allowed params: :count, :page, :order, :from, :to.
+# Allowed params are:
+# :count, :page, :order, :from, :to     (the same as decribed in blockfrost docs)
+# :from_page, :to_page, :parallel_requests, :sleep_between_retries_ms    (see below)
+
+# Example of usage:
 blockfrost.get_asset_history('81791e9e..1303035', { count: 50, page: 3, order: 'desc' })
 
 
 # You may define what value should be used by default when you initialize the object.
-# Default values are: { use_asc_order_as_default: true, default_count_per_page: 100 }
-config = { use_asc_order_as_default: false, default_count_per_page: 10 }
+config = { use_asc_order_as_default: false, default_count_per_page: 10 } # See the list of params below
 blockfrost_configured = Blockfrostruby::CardanoMainNet.new('your-API-key', config)
 blockfrost_configured.get_block_latest_transactions # will add order=asc&count=10 to request
 
@@ -74,27 +62,61 @@ blockfrost_configured.get_block_latest_transactions({ count: 20 }) # will add or
 
 # ==================
 # ==================
+# ==================
 
-# On the other words: 
+# On the other words:
 
 # 1. Install the gem and require it
 
 require 'blockfrostruby'
 
+
 # 2. Initialize the object with the network:
 
 blockfrost_mainnet = Blockfrostruby::CardanoMainNet.new('your-API-key')
+
+# Or if you want to access other networks: 
+
 blockfrost_testnet = Blockfrostruby::CardanoTestNet.new('your-API-key')
 blockfrost_ipfs = Blockfrostruby::IPFS.new('your-API-key')
+
 
 # 3. When you initialize, you may configure what params this object will use as default:
 
 config = { default_count_per_page: 10 }
-blockfrost_configured = Blockfrostruby::CardanoMainNet.new('your-API-key', config)
+blockfrost = Blockfrostruby::CardanoMainNet.new('your-API-key', config)
 
-# 4. And you may pass params explicitly for every request if that request accept params
+# The list of values that can be defined in the config and its default values:
 
-blockfrost_configured.get_block_latest_transactions({ count: 20 })
+# config = {
+#  use_asc_order_as_default: true    - the orders of lists will be asc by default
+#  default_count_per_page: 100       - 100 items per page
+#  parallel_requests: 10             - when fetching pages concurrently,
+#                                      that param defines how many request
+#                                      will be sent in one bunch
+#  sleep_between_retries_ms: 500     - when you send too many concurent requests,
+#                                      your account may reach the limit and the API will
+#                                      start to answer you with 4xx statuses. This value
+#                                      defines how long to wait between retries
+# }
+
+
+# 4. You may pass params explicitly for every request if that request accept params:
+
+blockfrost.get_block_latest_transactions({ count: 20 })
+
+# Allowed params are:
+# :order, :page, :count, :from, :to - add ex. count= to the request
+# :from_page, :to_page - when you want to get many pages you may define this params.
+# Also note that you may define only :from_page and it will send requests until
+# the not-nil response will be fetched.
+# And 2 more params are:
+# :parallel_requests, :sleep_between_retries_ms - the same as in config,
+# but may be set directly to the request.
+
+# Example of request:
+
+blockfrost.get_list_of_next_blocks("hash_here", { count: 40, from_page: 11520, to_page: 11640, parallel_requests: 15 })
 
 # That's it! Enjoy
 
