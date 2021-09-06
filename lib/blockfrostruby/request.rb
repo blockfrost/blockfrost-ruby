@@ -122,6 +122,12 @@ module Request
             stops = true if response.nil?
             next if response.nil?
 
+            if response[:status].to_i != 200
+              responses << { page_number: local_page_number, response: response }
+              stops = true
+              next
+            end
+
             responses << { page_number: local_page_number, response: response }
             page_number += 1
           end
@@ -145,9 +151,14 @@ module Request
 
     def format_pages_results(responses)
       result = { status: nil, body: [] }
-      result[:body] = responses.map { |r| r[:body] }.flatten
+      result[:body] = responses.map { |r| r[:body] }.flatten#.map{|s| s['size']}
+      puts responses.flatten.map { |r| r[:status] }
       result[:status] = responses.flatten.map { |r| r[:status] }[-1]
+      result[:status] = result[:status].to_i if result[:status]
       result
+    end
+
+    def raise_api_error
     end
   end
 end
