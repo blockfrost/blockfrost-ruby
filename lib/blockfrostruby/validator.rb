@@ -12,6 +12,7 @@ module Validator
       validate_both_from_and_to(params[:from], params[:to])
       validate_both_from_page_and_to_page(params[:from_page], params[:to_page])
       validate_parallel_requests(params[:parallel_requests])
+      validate_sleep_between_retries(params[:sleep_between_retries_ms])
 
       # TODO: think about using it
       if (params[:from_page] || params[:to_page]) && params[:page]
@@ -24,6 +25,7 @@ module Validator
       validate_count(config[:default_count_per_page]) # init count
       validate_use_order(config[:use_asc_order_as_default])
       validate_parallel_requests(config[:parallel_requests])
+      validate_sleep_between_retries(config[:sleep_between_retries_ms])
     end
 
     private
@@ -35,6 +37,16 @@ module Validator
 
     def validate_parallel_requests(param)
       param_name = 'parallel_requests'
+      if param
+        validate_is_numeric(param, param_name)
+        validate_is_integer(param, param_name)
+        validate_is_positive(param, param_name)
+        validate_lower_or_equal_than(param, param_name, MAX_NUMBER_OF_PARALLEL_REQUESTS)
+      end
+    end
+
+    def validate_sleep_between_retries(param)
+      param_name = 'sleep_between_retries_ms'
       if param
         validate_is_numeric(param, param_name)
         validate_is_integer(param, param_name)

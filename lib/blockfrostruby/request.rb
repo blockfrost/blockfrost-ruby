@@ -4,6 +4,7 @@ require 'net/http'
 require 'json'
 
 require_relative './version'
+require_relative './constants'
 
 module Request
   include Blockfrostruby
@@ -53,7 +54,6 @@ module Request
       return url if sliced_params.empty?
 
       request_params = sliced_params.map { |k, v| "#{k}=#{v}" }.join('&')
-      puts "#{url}?#{request_params}"
       "#{url}?#{request_params}"
     end
 
@@ -105,7 +105,9 @@ module Request
 
     def get_pages_multi(url, project_id, params = {})
       parallel_requests = params[:parallel_requests]
+      sleep_retries = params[:sleep_between_retries_ms]
       responses = []
+      numbers = []
       page_number = params[:from_page]
       threads = []
       stops = false
@@ -122,7 +124,24 @@ module Request
             stops = true if response.nil?
             next if response.nil?
 
+            raise ScriptError, "You've been reached your daily limit" if response[:status].to_i == 402
+
+            if response[:status].to_i == 418
+              raise ScriptError,
+                    "You've been temporary banned for too many requests"
+            end
+
+            if response[:status].to_i == 429
+              (1..MAX_RETRIES_IN_PARALLEL_REQUESTS).each do
+                sleep sleep_retries / 1000.0
+                response = get_response_from_page(url, project_id, local_page_number, params)
+                break if response[:status].to_i == 200
+              end
+            end
+            raise ScriptError, 'Please, try again later' if response[:status].to_i == 429
+
             responses << { page_number: local_page_number, response: response }
+            numbers << local_page_number
             page_number += 1
           end
         end
@@ -130,6 +149,11 @@ module Request
         threads.each(&:join)
         break if params[:to_page] && (page_number > params[:to_page])
         break if stops == true
+
+        numbers.sort!
+        if numbers != numbers.uniq
+          raise 'The response includes duplicated results, reduce the number of parallel_requests and try again'
+        end
       end
       responses.sort! { |el1, el2| el1[:page_number] <=> el2[:page_number] }.map! { |el| el[:response] }
       format_pages_results(responses)
@@ -147,6 +171,7 @@ module Request
       result = { status: nil, body: [] }
       result[:body] = responses.map { |r| r[:body] }.flatten
       result[:status] = responses.flatten.map { |r| r[:status] }[-1]
+      result[:status] = result[:status].to_i if result[:status]
       result
     end
   end
