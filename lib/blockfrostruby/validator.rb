@@ -12,6 +12,7 @@ module Validator
       validate_both_from_and_to(params[:from], params[:to])
       validate_both_from_page_and_to_page(params[:from_page], params[:to_page])
       validate_parallel_requests(params[:parallel_requests])
+      validate_sleep_between_retries(params[:sleep_between_retries_ms])
 
       # TODO: think about using it
       if (params[:from_page] || params[:to_page]) && params[:page]

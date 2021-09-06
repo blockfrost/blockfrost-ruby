@@ -14,13 +14,14 @@ module Params
       result[:order] = define_order(result[:order], config)
       result[:count] = define_count(result[:count], config)
       result[:parallel_requests] = define_parallel_requests(result[:parallel_requests], config)
+      result[:sleep_between_retries_ms] = define_sleep_between_retries(result[:sleep_between_retries_ms], config)
       result.compact
     end
 
     private
 
     def extract_params(params)
-      params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page, :parallel_requests)
+      params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page, :parallel_requests, :sleep_between_retries_ms)
     end
 
     def define_order(order_param, object_config)
@@ -63,6 +64,11 @@ module Params
 
     def define_parallel_requests(params_value, object_config)
       object_config_value = object_config[:parallel_requests]
+      params_value.nil? ? object_config_value : params_value
+    end
+
+    def define_sleep_between_retries(params_value, object_config)
+      object_config_value = object_config[:sleep_between_retries_ms]
       params_value.nil? ? object_config_value : params_value
     end
   end

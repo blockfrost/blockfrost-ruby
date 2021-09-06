@@ -1,11 +1,10 @@
 # frozen_string_literal: true
-SLEEP = 0.5
-TRIES = 10
 
 require 'net/http'
 require 'json'
 
 require_relative './version'
+require_relative './constants'
 
 module Request
   include Blockfrostruby
@@ -55,7 +54,6 @@ module Request
       return url if sliced_params.empty?
 
       request_params = sliced_params.map { |k, v| "#{k}=#{v}" }.join('&')
-      puts "#{url}?#{request_params}"
       "#{url}?#{request_params}"
     end
 
@@ -107,6 +105,7 @@ module Request
 
     def get_pages_multi(url, project_id, params = {})
       parallel_requests = params[:parallel_requests]
+      sleep_retries = params[:sleep_between_retries_ms]
       responses = []
       numbers = []
       page_number = params[:from_page]
@@ -127,24 +126,27 @@ module Request
             
             if response[:status].to_i == 402
               raise ScriptError, "You've been reached your daily limit" 
-              break
+              stops = true
+              next
             end
 
             if response[:status].to_i == 418
               raise ScriptError, "You've been temporary banned for too many requests"
-              break
+              stops = true
+              next
             end
             
             if response[:status].to_i == 429
-              for i in (1..TRIES)
-                sleep SLEEP
+              for i in (1..MAX_RETRIES_IN_PARALLEL_REQUESTS)
+                sleep sleep_retries / 1000.0
                 response = get_response_from_page(url, project_id, local_page_number, params)
-                next if response[:status].to_i == 429
+                break if response[:status].to_i == 200
               end
             end
             if response[:status].to_i == 429
               raise ScriptError, "Please, try again later" 
-              break
+              stops = true
+              next
             end
             responses << { page_number: local_page_number, response: response }
             numbers << local_page_number
@@ -162,7 +164,6 @@ module Request
           break
         end
       end
-      # if number.sort !== (from_page..to_page) raise error not all was included also break on value
       responses.sort! { |el1, el2| el1[:page_number] <=> el2[:page_number] }.map! { |el| el[:response] }
       format_pages_results(responses)
     end
@@ -177,7 +178,7 @@ module Request
 
     def format_pages_results(responses)
       result = { status: nil, body: [] }
-      result[:body] = responses.map { |r| r[:body] }.flatten.count#.map{|s| s['size']}
+      result[:body] = responses.map { |r| r[:body] }.flatten
       puts responses.flatten.map { |r| r[:status] }
       result[:status] = responses.flatten.map { |r| r[:status] }[-1]
       result[:status] = result[:status].to_i if result[:status]
