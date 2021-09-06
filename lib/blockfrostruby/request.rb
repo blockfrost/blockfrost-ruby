@@ -106,6 +106,7 @@ module Request
     def get_pages_multi(url, project_id, params = {})
       parallel_requests = params[:parallel_requests]
       responses = []
+      numbers = []
       page_number = params[:from_page]
       threads = []
       stops = false
@@ -129,6 +130,7 @@ module Request
             end
 
             responses << { page_number: local_page_number, response: response }
+            numbers << local_page_number
             page_number += 1
           end
         end
@@ -136,7 +138,14 @@ module Request
         threads.each(&:join)
         break if params[:to_page] && (page_number > params[:to_page])
         break if stops == true
+        numbers.sort!
+        if numbers != numbers.uniq
+          raise RuntimeError, 
+            'The response includes duplicated results, reduce the number of parallel_requests and try again'
+          break
+        end
       end
+      # if number.sort !== (from_page..to_page) raise error not all was included also break on value
       responses.sort! { |el1, el2| el1[:page_number] <=> el2[:page_number] }.map! { |el| el[:response] }
       format_pages_results(responses)
     end
@@ -156,9 +165,6 @@ module Request
       result[:status] = responses.flatten.map { |r| r[:status] }[-1]
       result[:status] = result[:status].to_i if result[:status]
       result
-    end
-
-    def raise_api_error
     end
   end
 end
