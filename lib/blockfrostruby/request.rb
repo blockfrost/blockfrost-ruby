@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+SLEEP = 0.5
+TRIES = 10
 
 require 'net/http'
 require 'json'
@@ -122,13 +124,28 @@ module Request
 
             stops = true if response.nil?
             next if response.nil?
-
-            if response[:status].to_i != 200
-              responses << { page_number: local_page_number, response: response }
-              stops = true
-              next
+            
+            if response[:status].to_i == 402
+              raise ScriptError, "You've been reached your daily limit" 
+              break
             end
 
+            if response[:status].to_i == 418
+              raise ScriptError, "You've been temporary banned for too many requests"
+              break
+            end
+            
+            if response[:status].to_i == 429
+              for i in (1..TRIES)
+                sleep SLEEP
+                response = get_response_from_page(url, project_id, local_page_number, params)
+                next if response[:status].to_i == 429
+              end
+            end
+            if response[:status].to_i == 429
+              raise ScriptError, "Please, try again later" 
+              break
+            end
             responses << { page_number: local_page_number, response: response }
             numbers << local_page_number
             page_number += 1
@@ -160,7 +177,7 @@ module Request
 
     def format_pages_results(responses)
       result = { status: nil, body: [] }
-      result[:body] = responses.map { |r| r[:body] }.flatten#.map{|s| s['size']}
+      result[:body] = responses.map { |r| r[:body] }.flatten.count#.map{|s| s['size']}
       puts responses.flatten.map { |r| r[:status] }
       result[:status] = responses.flatten.map { |r| r[:status] }[-1]
       result[:status] = result[:status].to_i if result[:status]
