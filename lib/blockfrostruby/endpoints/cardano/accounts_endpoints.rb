@@ -52,10 +52,4 @@ module AccountsEndpoints
     params = Params.define_params(params, @config)
     Request.get_response("#{@url}/accounts/#{address}/addresses/assets", @project_id, params)
   end
-
-  # METHODS WITH GET ALL
-  # def get_account_rewards_all(address, params = {})
-  # params = Params.define_params(params, @config)
-  # Request.get_all_pages("#{@url}/accounts/#{address}/rewards", @project_id, params)
-  # end
 end

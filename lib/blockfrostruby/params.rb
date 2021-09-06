@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'configuration'
-require_relative 'constants'
 require_relative 'validator'
 
 module Params
@@ -14,13 +13,14 @@ module Params
       Validator.validate_params(result)
       result[:order] = define_order(result[:order], config)
       result[:count] = define_count(result[:count], config)
+      result[:parallel_requests] = define_parallel_requests(result[:parallel_requests], config)
       result.compact
     end
 
     private
 
     def extract_params(params)
-      params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page)
+      params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page, :parallel_requests)
     end
 
     def define_order(order_param, object_config)
@@ -56,9 +56,14 @@ module Params
     # Checks: pass combined params
 
     def define_value(default_config_value, object_config_value, params_value)
-      result = params_value.nil? ? object_config_value : params_value
+      result = params_value.nil? ? object_config_value : params_value # params_value? params_value : object_config_value
       result = nil if result == default_config_value
       result
+    end
+
+    def define_parallel_requests(params_value, object_config)
+      object_config_value = object_config[:parallel_requests]
+      params_value.nil? ? object_config_value : params_value
     end
   end
 end

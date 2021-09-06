@@ -10,7 +10,7 @@ module Request
 
   class << self
     def get_response(url, project_id, params = {})
-      params[:from_page] ? get_pages(url, project_id, params) : get_response_from_url(url, project_id, params)
+      params[:from_page] ? get_pages_multi(url, project_id, params) : get_response_from_url(url, project_id, params)
     end
 
     def post_request_raw(url, project_id)
@@ -21,8 +21,8 @@ module Request
       format_response(response)
     end
 
-    def post_request_cbor(url, project_id, body, params = {})
-      uri = URI(add_params_to_url(url, params))
+    def post_request_cbor(url, project_id, body)
+      uri = URI(url)
       request = create_post_request(uri, project_id)
       request['Content-Type'] = 'application/cbor'
       request.body = body
@@ -49,9 +49,11 @@ module Request
     end
 
     def add_params_to_url(url, params)
-      return url if params.empty?
+      sliced_params = params.slice(:order, :page, :count, :from, :to).compact
+      return url if sliced_params.empty?
 
-      request_params = params.map { |k, v| "#{k}=#{v}" }.join('&')
+      request_params = sliced_params.map { |k, v| "#{k}=#{v}" }.join('&')
+      puts "#{url}?#{request_params}"
       "#{url}?#{request_params}"
     end
 
@@ -89,10 +91,11 @@ module Request
       page_number = params[:from_page]
 
       loop do
+        break if params[:to_page] && (page_number > params[:to_page])
+
         response = get_response_from_page(url, project_id, page_number, params)
 
         break if response.nil?
-        break if params[:to_page] && (page_number > params[:to_page])
 
         responses << response
         page_number += 1
@@ -100,8 +103,40 @@ module Request
       format_pages_results(responses)
     end
 
+    def get_pages_multi(url, project_id, params = {})
+      parallel_requests = params[:parallel_requests]
+      responses = []
+      page_number = params[:from_page]
+      threads = []
+      stops = false
+      loop do
+        parallel_requests.times do |i|
+          threads << Thread.new(page_number) do
+            local_page_number = page_number + i
+
+            stops = true if params[:to_page] && (local_page_number > params[:to_page])
+            next if params[:to_page] && (local_page_number > params[:to_page])
+
+            response = get_response_from_page(url, project_id, local_page_number, params)
+
+            stops = true if response.nil?
+            next if response.nil?
+
+            responses << { page_number: local_page_number, response: response }
+            page_number += 1
+          end
+        end
+
+        threads.each(&:join)
+        break if params[:to_page] && (page_number > params[:to_page])
+        break if stops == true
+      end
+      responses.sort! { |el1, el2| el1[:page_number] <=> el2[:page_number] }.map! { |el| el[:response] }
+      format_pages_results(responses)
+    end
+
     def get_response_from_page(url, project_id, page_number, params = {})
-      params_to_pass = params.slice(:order, :count).merge(page: page_number)
+      params_to_pass = params.slice(:order, :count).merge(page: page_number) # Why slice here?
       response = get_response_from_url(url, project_id, params_to_pass)
       return if response[:body].empty?
 

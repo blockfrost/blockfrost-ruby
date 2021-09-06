@@ -23,6 +23,4 @@ module MetadataEndpoints
     params = Params.define_params(params, @config)
     Request.get_response("#{@url}/metadata/txs/labels/#{label}/cbor", @project_id, params)
   end
-
-  # METHODS WITH GET ALL
 end

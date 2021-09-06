@@ -9,6 +9,8 @@ require_relative 'blockfrostruby/version'
 require_relative 'blockfrostruby/constants'
 require_relative 'blockfrostruby/configuration'
 
+# Dir.glob( 'path/to/dir/*.rake' ).each { |r| require_relative r }
+
 require_relative 'blockfrostruby/endpoints/cardano/health_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/metrics_endpoints'
 require_relative 'blockfrostruby/endpoints/cardano/accounts_endpoints'

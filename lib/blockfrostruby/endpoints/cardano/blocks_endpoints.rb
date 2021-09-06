@@ -46,6 +46,4 @@ module BlocksEndpoints
     params = Params.define_params(params, @config)
     Request.get_response("#{@url}/blocks/#{hash_or_number}/txs", @project_id, params)
   end
-
-  # METHODS WITH GET ALL
 end

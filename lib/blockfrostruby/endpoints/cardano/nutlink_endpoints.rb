@@ -27,6 +27,4 @@ module NutlinkEndpoints
     params = Params.define_params(params, @config)
     Request.get_response("#{@url}/nutlink/tickers/#{ticker}", @project_id, params)
   end
-
-  # METHODS WITH GET ALL
 end
