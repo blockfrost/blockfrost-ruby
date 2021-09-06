@@ -21,7 +21,8 @@ module Params
     private
 
     def extract_params(params)
-      params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page, :parallel_requests, :sleep_between_retries_ms)
+      params.transform_keys(&:to_sym).slice(:order, :page, :count, :from, :to, :from_page, :to_page,
+                                            :parallel_requests, :sleep_between_retries_ms)
     end
 
     def define_order(order_param, object_config)

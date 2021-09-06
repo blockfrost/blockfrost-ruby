@@ -123,31 +123,23 @@ module Request
 
             stops = true if response.nil?
             next if response.nil?
-            
-            if response[:status].to_i == 402
-              raise ScriptError, "You've been reached your daily limit" 
-              stops = true
-              next
-            end
+
+            raise ScriptError, "You've been reached your daily limit" if response[:status].to_i == 402
 
             if response[:status].to_i == 418
-              raise ScriptError, "You've been temporary banned for too many requests"
-              stops = true
-              next
+              raise ScriptError,
+                    "You've been temporary banned for too many requests"
             end
-            
+
             if response[:status].to_i == 429
-              for i in (1..MAX_RETRIES_IN_PARALLEL_REQUESTS)
+              (1..MAX_RETRIES_IN_PARALLEL_REQUESTS).each do
                 sleep sleep_retries / 1000.0
                 response = get_response_from_page(url, project_id, local_page_number, params)
                 break if response[:status].to_i == 200
               end
             end
-            if response[:status].to_i == 429
-              raise ScriptError, "Please, try again later" 
-              stops = true
-              next
-            end
+            raise ScriptError, 'Please, try again later' if response[:status].to_i == 429
+
             responses << { page_number: local_page_number, response: response }
             numbers << local_page_number
             page_number += 1
@@ -157,11 +149,10 @@ module Request
         threads.each(&:join)
         break if params[:to_page] && (page_number > params[:to_page])
         break if stops == true
+
         numbers.sort!
         if numbers != numbers.uniq
-          raise RuntimeError, 
-            'The response includes duplicated results, reduce the number of parallel_requests and try again'
-          break
+          raise 'The response includes duplicated results, reduce the number of parallel_requests and try again'
         end
       end
       responses.sort! { |el1, el2| el1[:page_number] <=> el2[:page_number] }.map! { |el| el[:response] }
@@ -179,7 +170,6 @@ module Request
     def format_pages_results(responses)
       result = { status: nil, body: [] }
       result[:body] = responses.map { |r| r[:body] }.flatten
-      puts responses.flatten.map { |r| r[:status] }
       result[:status] = responses.flatten.map { |r| r[:status] }[-1]
       result[:status] = result[:status].to_i if result[:status]
       result
