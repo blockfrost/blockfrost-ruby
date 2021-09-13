@@ -162,7 +162,7 @@ module Validator
     end
 
     def validate_is_boolean(param, param_name)
-      unless param.is_a?(True) || param.is_a?(False)
+      unless param.is_a?(TrueClass) || param.is_a?(FalseClass)
         raise ArgumentError,
               "\"#{param_name}\" is not a true or a false"
       end

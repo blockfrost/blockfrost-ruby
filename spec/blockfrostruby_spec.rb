@@ -3,7 +3,7 @@
 require_relative '../lib/blockfrostruby.rb'
 require_relative '../lib/blockfrostruby/constants.rb'
 
-RSpec.describe Blockfrostruby do
+RSpec.describe Blockfrostruby::VERSION do
   it 'has a version number' do
     expect(Blockfrostruby::VERSION).not_to be nil
   end
