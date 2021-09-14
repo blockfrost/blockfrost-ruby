@@ -60,7 +60,7 @@ module Params
     def define_value(default_config_value, object_config_value, params_value)
       result = params_value.nil? ? object_config_value : params_value # params_value? params_value : object_config_value
       # Need to do this to avoid adding ?param=value to request if it is default as in the API
-      result = nil if result == default_config_value 
+      result = nil if result == default_config_value
       result
     end
 
