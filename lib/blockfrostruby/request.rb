@@ -160,7 +160,7 @@ module Request
     end
 
     def get_response_from_page(url, project_id, page_number, params = {})
-      params_to_pass = params.slice(:order, :count).merge(page: page_number) # Why slice here?
+      params_to_pass = params.slice(:order, :count).merge(page: page_number)
       response = get_response_from_url(url, project_id, params_to_pass)
       return if response[:body].empty?
 
