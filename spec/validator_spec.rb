@@ -231,21 +231,4 @@ RSpec.describe Validator do
       end
     end
   end
-
-  # TODO: remove to helpers
-  def stub_cardano_success_request(endpoint, response_body, project_id)
-    stub_request(:get, "#{CARDANO_MAINNET_URL}#{endpoint}")
-      .with(
-        headers: {
-          'Accept' => '*/*',
-          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'Host' => 'cardano-mainnet.blockfrost.io',
-          'Project-Id' => project_id.to_s,
-          'User-Agent' => "Blockfrost-Ruby, version: #{Blockfrostruby::VERSION}"
-        }
-      )
-      .to_return(status: 200, body: response_body, headers: {
-                   'Content-Type' => 'application/json; charset=utf-8'
-                 })
-  end
 end
