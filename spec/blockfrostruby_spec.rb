@@ -3,14 +3,14 @@
 require_relative '../lib/blockfrostruby.rb'
 require_relative '../lib/blockfrostruby/constants.rb'
 
-RSpec.describe Blockfrostruby::VERSION do
+RSpec.describe Blockfrostruby do
   it 'has a version number' do
     expect(Blockfrostruby::VERSION).not_to be nil
   end
 end
 
 RSpec.describe Blockfrostruby::CardanoMainNet do
-  context 'with project_id' do
+  context 'new() with project_id' do
     context 'without any params' do
 
       subject { Blockfrostruby::CardanoMainNet.new('project_id') }
@@ -33,7 +33,7 @@ RSpec.describe Blockfrostruby::CardanoMainNet do
     end
 
     context 'with valid params' do
-      config = { 
+      config = {
         use_asc_order_as_default: false,
         parallel_requests: 15,
         default_count_per_page: 35,
@@ -60,28 +60,28 @@ RSpec.describe Blockfrostruby::CardanoMainNet do
     end
 
     context 'with invalid params' do
-      config = { 
+      config = {
         use_asc_order_as_default: 10,
         parallel_requests: false,
         default_count_per_page: 'any word',
         sleep_between_retries_ms: :symbol
       }
-      
+
       it 'raise an ArgumentError' do
         expect { Blockfrostruby::CardanoMainNet.new('project_id', config)}.to raise_error(ArgumentError)
       end
     end
+  end
 
-    context 'without project_id' do
-      it 'raise an ArgumentError' do
-        expect { Blockfrostruby::CardanoMainNet.new()}.to raise_error(ArgumentError)
-      end
+  context 'new() without project_id' do
+    it 'raise an ArgumentError' do
+      expect { Blockfrostruby::CardanoMainNet.new()}.to raise_error(ArgumentError)
     end
   end
 end
 
 RSpec.describe Blockfrostruby::CardanoTestNet do
-  context 'with project_id' do
+  context 'new() with project_id' do
     context 'without any params' do
 
       subject { Blockfrostruby::CardanoTestNet.new('project_id') }
@@ -104,7 +104,7 @@ RSpec.describe Blockfrostruby::CardanoTestNet do
     end
 
     context 'with valid params' do
-      config = { 
+      config = {
         use_asc_order_as_default: false,
         parallel_requests: 15,
         default_count_per_page: 35,
@@ -131,28 +131,28 @@ RSpec.describe Blockfrostruby::CardanoTestNet do
     end
 
     context 'with invalid params' do
-      config = { 
+      config = {
         use_asc_order_as_default: 10,
         parallel_requests: false,
         default_count_per_page: 'any word',
         sleep_between_retries_ms: :symbol
       }
-      
+
       it 'raise an ArgumentError' do
         expect { Blockfrostruby::CardanoTestNet.new('project_id', config)}.to raise_error(ArgumentError)
       end
     end
+  end
 
-    context 'without project_id' do
-      it 'raise an ArgumentError' do
-        expect { Blockfrostruby::CardanoTestNet.new()}.to raise_error(ArgumentError)
-      end
+  context 'new() without project_id' do
+    it 'raise an ArgumentError' do
+      expect { Blockfrostruby::CardanoTestNet.new()}.to raise_error(ArgumentError)
     end
   end
 end
 
 RSpec.describe Blockfrostruby::IPFS do
-  context 'with project_id' do
+  context 'new() with project_id' do
     context 'without any params' do
 
       subject { Blockfrostruby::IPFS.new('project_id') }
@@ -175,7 +175,7 @@ RSpec.describe Blockfrostruby::IPFS do
     end
 
     context 'with valid params' do
-      config = { 
+      config = {
         use_asc_order_as_default: false,
         parallel_requests: 15,
         default_count_per_page: 35,
@@ -202,22 +202,22 @@ RSpec.describe Blockfrostruby::IPFS do
     end
 
     context 'with invalid params' do
-      config = { 
+      config = {
         use_asc_order_as_default: 10,
         parallel_requests: false,
         default_count_per_page: 'any word',
         sleep_between_retries_ms: :symbol
       }
-      
+
       it 'raise an ArgumentError' do
         expect { Blockfrostruby::IPFS.new('project_id', config)}.to raise_error(ArgumentError)
       end
     end
+  end
 
-    context 'without project_id' do
-      it 'raise an ArgumentError' do
-        expect { Blockfrostruby::IPFS.new()}.to raise_error(ArgumentError)
-      end
+  context 'new() without project_id' do
+    it 'raise an ArgumentError' do
+      expect { Blockfrostruby::IPFS.new()}.to raise_error(ArgumentError)
     end
   end
 end

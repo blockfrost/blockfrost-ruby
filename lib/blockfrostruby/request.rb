@@ -45,8 +45,8 @@ module Request
     def format_response(response)
       content_type = response.header.content_type
       able_to_parse = ['application/json', 'application/octet-stream'].include?(content_type)
-      body = able_to_parse ? JSON.parse(response.body) : response.body
-      { status: response.code, body: body }
+      body = able_to_parse ? JSON.parse(response.body).transform_keys(&:to_sym) : response.body
+      { status: response.code.to_i, body: body }
     end
 
     def add_params_to_url(url, params)

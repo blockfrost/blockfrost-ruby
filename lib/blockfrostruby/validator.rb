@@ -70,6 +70,7 @@ module Validator
         validate_is_numeric(param, param_name)
         validate_is_integer(param, param_name)
         validate_is_positive(param, param_name)
+        validate_lower_or_equal_than(param, param_name, MAX_COUNT_PER_PAGE)
       end
     end
 
