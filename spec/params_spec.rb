@@ -42,14 +42,14 @@ RSpec.describe Params do
       end
     end
 
-    context 'when params has no default value in API' do 
-      context 'when passing single params' do 
+    context 'when params has no default value in API' do
+      context 'when passing single params' do
         it 'adds \'page\' param to return' do
           params = Params.define_params({ page: 10 }, blockfrost.config)
           expect(params).to include(:page)
           expect(params[:page]).to eq(10)
         end
-        
+
         it 'adds \'from\' param to return' do
           params = Params.define_params({ from: 10 }, blockfrost.config)
           expect(params).to include(:from)
@@ -87,15 +87,44 @@ RSpec.describe Params do
           expect(params[:sleep_between_retries_ms]).to eq(10)
         end
       end
+
+      context 'when passing combined params' do
+        context 'when some params have a default value the same as passed' do
+          it 'add only another params to return' do
+            params_list = {
+              count: 100,
+              order: 'asc',
+              from: 5,
+              to: 105,
+              parallel_requests: 20
+            }
+            params = Params.define_params(params_list, blockfrost.config)
+            expect(params).to include(:from)
+            expect(params).to include(:to)
+            expect(params).to include(:parallel_requests)
+            expect(params).not_to include(:count)
+            expect(params).not_to include(:order)
+          end
+        end
+
+        context 'when all params are not the same with default value' do
+          it 'add all params to return' do
+            params_list = {
+              count: 50,
+              order: 'desc',
+              from: 5,
+              to: 105,
+              parallel_requests: 20
+            }
+            params = Params.define_params(params_list, blockfrost.config)
+            expect(params).to include(:from)
+            expect(params).to include(:to)
+            expect(params).to include(:parallel_requests)
+            expect(params).to include(:count)
+            expect(params).to include(:order)
+          end
+        end
+      end
     end
   end
 end
-
-# allow to add permitted params
-# disallow to add not-permitted params
-
-# returns value from config if no passed
-# checks that it use value from config
-# checks that it will not add params to request
-
-# REQUEST - ADD ONLY ALLOWED API PARAMS TO THE REQUEST
