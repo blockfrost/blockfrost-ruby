@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../lib/blockfrostruby.rb'
-require_relative '../lib/blockfrostruby/constants.rb'
+require_relative '../lib/blockfrostruby'
+require_relative '../lib/blockfrostruby/constants'
 
 RSpec.describe Blockfrostruby do
   it 'has a version number' do
@@ -12,7 +12,6 @@ end
 RSpec.describe Blockfrostruby::CardanoMainNet do
   context 'new() with project_id' do
     context 'without any params' do
-
       subject { Blockfrostruby::CardanoMainNet.new('project_id') }
 
       it 'creates a CardanoMainNet instance' do
@@ -68,14 +67,14 @@ RSpec.describe Blockfrostruby::CardanoMainNet do
       }
 
       it 'raise an ArgumentError' do
-        expect { Blockfrostruby::CardanoMainNet.new('project_id', config)}.to raise_error(ArgumentError)
+        expect { Blockfrostruby::CardanoMainNet.new('project_id', config) }.to raise_error(ArgumentError)
       end
     end
   end
 
   context 'new() without project_id' do
     it 'raise an ArgumentError' do
-      expect { Blockfrostruby::CardanoMainNet.new()}.to raise_error(ArgumentError)
+      expect { Blockfrostruby::CardanoMainNet.new }.to raise_error(ArgumentError)
     end
   end
 end
@@ -83,7 +82,6 @@ end
 RSpec.describe Blockfrostruby::CardanoTestNet do
   context 'new() with project_id' do
     context 'without any params' do
-
       subject { Blockfrostruby::CardanoTestNet.new('project_id') }
 
       it 'creates a CardanoTestNet instance' do
@@ -139,14 +137,14 @@ RSpec.describe Blockfrostruby::CardanoTestNet do
       }
 
       it 'raise an ArgumentError' do
-        expect { Blockfrostruby::CardanoTestNet.new('project_id', config)}.to raise_error(ArgumentError)
+        expect { Blockfrostruby::CardanoTestNet.new('project_id', config) }.to raise_error(ArgumentError)
       end
     end
   end
 
   context 'new() without project_id' do
     it 'raise an ArgumentError' do
-      expect { Blockfrostruby::CardanoTestNet.new()}.to raise_error(ArgumentError)
+      expect { Blockfrostruby::CardanoTestNet.new }.to raise_error(ArgumentError)
     end
   end
 end
@@ -154,7 +152,6 @@ end
 RSpec.describe Blockfrostruby::IPFS do
   context 'new() with project_id' do
     context 'without any params' do
-
       subject { Blockfrostruby::IPFS.new('project_id') }
 
       it 'creates a IPFS instance' do
@@ -210,14 +207,14 @@ RSpec.describe Blockfrostruby::IPFS do
       }
 
       it 'raise an ArgumentError' do
-        expect { Blockfrostruby::IPFS.new('project_id', config)}.to raise_error(ArgumentError)
+        expect { Blockfrostruby::IPFS.new('project_id', config) }.to raise_error(ArgumentError)
       end
     end
   end
 
   context 'new() without project_id' do
     it 'raise an ArgumentError' do
-      expect { Blockfrostruby::IPFS.new()}.to raise_error(ArgumentError)
+      expect { Blockfrostruby::IPFS.new }.to raise_error(ArgumentError)
     end
   end
 end

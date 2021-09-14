@@ -3,7 +3,7 @@
 require 'blockfrostruby'
 require 'webmock/rspec'
 
-WebMock.disable_net_connect!(:allow_localhost => true)
+WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
