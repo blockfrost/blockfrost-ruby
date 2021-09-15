@@ -10,6 +10,13 @@ module Request
   include Blockfrostruby
 
   class << self
+    # Get response from passed URL, add params to request, add specific headers and format the response.
+    # If [:from_page] specified, calls the concurrent fetching process, else get response from single page.  
+    #
+    # @param url [String] the url to request.
+    # @param project_id [String] the project_id to pass to url in headers.
+    # @param params [Hash] params to add to request, allowed :order, :page, :count, :from, :to.
+    # @return [Hash] formatted result with {:status, :body}
     def get_response(url, project_id, params = {})
       params[:from_page] ? get_pages_multi(url, project_id, params) : get_response_from_url(url, project_id, params)
     end
