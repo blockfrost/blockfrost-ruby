@@ -27,7 +27,8 @@ def stub_cardano_success_request(endpoint, response_body, project_id)
             'Host' => 'cardano-mainnet.blockfrost.io',
             'Project-Id' => project_id.to_s,
             'User-Agent' => "Blockfrost-Ruby, version: #{Blockfrostruby::VERSION}"
-          }).to_return(status: 200, body: response_body, headers: {
-                         'Content-Type' => 'application/json; charset=utf-8'
-                       })
+          })
+    .to_return(status: 200, body: response_body, headers: {
+                 'Content-Type' => 'application/json; charset=utf-8'
+               })
 end
