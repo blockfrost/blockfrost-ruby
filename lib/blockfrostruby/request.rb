@@ -46,6 +46,11 @@ module Request
       content_type = response.header.content_type
       able_to_parse = ['application/json', 'application/octet-stream'].include?(content_type)
       body = able_to_parse ? JSON.parse(response.body) : response.body
+      if body.is_a?(Array)
+        body = body.map{|el| el.transform_keys(&:to_sym)}
+      elsif body.is_a?(Hash)
+        body = body.transform_keys(&:to_sym)
+      end
       { status: response.code.to_i, body: body }
     end
 
