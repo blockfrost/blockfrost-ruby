@@ -7,7 +7,6 @@ module Configuration
   include Validator
 
   class << self
-
     # Loads a default config from config.yml file.
     def default_config
       YAML.safe_load(
