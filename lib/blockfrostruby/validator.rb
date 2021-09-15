@@ -6,6 +6,13 @@ require_relative 'constants'
 module Validator
   class << self
     # rubocop:disable Metrics/AbcSize
+
+    # Validates params, which is passed to instanse of Net subclass object. 
+    # Callings from Params module. 
+    # If params don't meet specific conditions, it raise an ArgumentError.
+    #
+    # @param params [Hash] includes passed params.
+    # @return [ArgumentError | nil] if there is no valid params
     def validate_params(params)
       validate_count(params[:count])
       validate_page(params[:page])
@@ -22,6 +29,11 @@ module Validator
     end
     # rubocop:enable Metrics/AbcSize
 
+    # Validates config, which is passed to constructor of instanse of Net subclass object. 
+    # If params don't meet specific conditions, it raise an ArgumentError.
+    #
+    # @param config [Hash] includes passed params.
+    # @return [ArgumentError | nil] if there is no valid params
     def validate_init_params(config)
       validate_count(config[:default_count_per_page])
       validate_use_order(config[:use_asc_order_as_default])
