@@ -5,13 +5,13 @@ AllCops:
 # Metrics
 
 Metrics/BlockLength:
-  Max: 120
-
-Layout/LineLength:
-  Max: 120
+  Max: 240
 
 Metrics/MethodLength:
   Max: 30
+
+Metrics/ModuleLength:
+  Max: 240
 
 # Documentation
 
@@ -28,3 +28,6 @@ Style/SymbolArray:
 
 Naming/AccessorMethodName:
   Enabled: false
+
+Layout/LineLength:
+  Max: 120

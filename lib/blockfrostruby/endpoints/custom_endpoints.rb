@@ -15,6 +15,4 @@ module CustomEndpoints
   def get_help_info
     'See the documentation here - https://github.com/blockfrost/blockfrost-ruby'
   end
-
-  # METHODS WITH GET ALL
 end

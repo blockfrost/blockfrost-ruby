@@ -46,7 +46,13 @@ module Request
       content_type = response.header.content_type
       able_to_parse = ['application/json', 'application/octet-stream'].include?(content_type)
       body = able_to_parse ? JSON.parse(response.body) : response.body
-      { status: response.code, body: body }
+      case body
+      when Array
+        body = body.map { |el| el.transform_keys(&:to_sym) }
+      when Hash
+        body = body.transform_keys(&:to_sym)
+      end
+      { status: response.code.to_i, body: body }
     end
 
     def add_params_to_url(url, params)
@@ -103,6 +109,7 @@ module Request
       format_pages_results(responses)
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     def get_pages_multi(url, project_id, params = {})
       parallel_requests = params[:parallel_requests]
       sleep_retries = params[:sleep_between_retries_ms]
@@ -158,9 +165,10 @@ module Request
       responses.sort! { |el1, el2| el1[:page_number] <=> el2[:page_number] }.map! { |el| el[:response] }
       format_pages_results(responses)
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 
     def get_response_from_page(url, project_id, page_number, params = {})
-      params_to_pass = params.slice(:order, :count).merge(page: page_number) # Why slice here?
+      params_to_pass = params.slice(:order, :count).merge(page: page_number)
       response = get_response_from_url(url, project_id, params_to_pass)
       return if response[:body].empty?
 

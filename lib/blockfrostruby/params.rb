@@ -32,14 +32,6 @@ module Params
       define_value(order_in_default_config, order_in_object_config, order_param)
     end
 
-    # Checks:
-    # 1. Pass ({}, {use_desc_order_as_default: false}), should return {}
-    # 2. Pass ({}, {use_desc_order_as_default: true}), should return {order: desc}
-    # 3. Pass ({ order: 'desc' }, {use_desc_order_as_default: true}), should return {order: desc}
-    # 4. Pass ({ order: 'asc' }, {use_desc_order_as_default: true}, should return {}
-    # 5. Pass ({ order: 'asc' }, {use_desc_order_as_default: false}), should return {}
-    # 6. Pass ({ order: 'desc'}, {use_desc_order_as_default: false}, should return {order: desc})
-
     def define_count(count_param, object_config)
       default_config = Configuration.default_config
       count_in_default_config = default_config[:default_count_per_page]
@@ -47,18 +39,9 @@ module Params
       define_value(count_in_default_config, count_in_object_config, count_param)
     end
 
-    # Checks:
-    # 1. Pass ({}, {default_count_per_page: 100}), should return {}
-    # 2. Pass ({}, {default_count_per_page: 5}), should return {count: 5}
-    # 3. Pass ({count: 5}, {default_count_per_page: 100}), should return {count: 5}
-    # 4. Pass ({count: 5}, {default_count_per_page: 5}), should return {count: 5}
-    # 5. Pass ({count: 100}, {default_count_per_page: 100}), should return {}
-    # 6. Pass ({count: 5}, {default_count_per_page: 100}), should return {count: 5})
-
-    # Checks: pass combined params
-
     def define_value(default_config_value, object_config_value, params_value)
-      result = params_value.nil? ? object_config_value : params_value # params_value? params_value : object_config_value
+      result = params_value || object_config_value
+      # Need to do this to avoid adding ?param=value to request if it is default as in the API
       result = nil if result == default_config_value
       result
     end
