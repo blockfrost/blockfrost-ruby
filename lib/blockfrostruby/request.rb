@@ -11,7 +11,7 @@ module Request
 
   class << self
     # Get response from passed URL, add params to request, add specific headers and format the response.
-    # If [:from_page] specified, calls the concurrent fetching process, else get response from single page.  
+    # If [:from_page] specified, calls the concurrent fetching process, else get response from single page.
     #
     # @param url [String] the url to request.
     # @param project_id [String] the project_id to pass to url in headers.
@@ -182,9 +182,7 @@ module Request
         break if stops == true
 
         numbers.sort!
-        if numbers != numbers.uniq
-          raise 'The response includes duplicated results, reduce the number of parallel_requests and try again'
-        end
+        raise 'The response includes duplicated results, reduce the number of parallel_requests and try again' if numbers != numbers.uniq
       end
       responses.sort! { |el1, el2| el1[:page_number] <=> el2[:page_number] }.map! { |el| el[:response] }
       format_pages_results(responses)

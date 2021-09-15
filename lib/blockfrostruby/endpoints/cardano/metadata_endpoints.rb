@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
- # Example label: 1990
+# Example label: 1990
 
 require_relative '../../../blockfrostruby/request'
 require_relative '../../../blockfrostruby/params'

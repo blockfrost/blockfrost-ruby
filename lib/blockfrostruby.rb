@@ -53,7 +53,7 @@ module Blockfrostruby
     include PoolsEndpoints
     include TransactionsEndpoints
     include NutlinkEndpoints
-    
+
     # Create an instanse of CardanoMainNet object.
     # Using of SDK is a calling methods on such object.
     #
@@ -67,7 +67,6 @@ module Blockfrostruby
   end
 
   class CardanoTestNet < CardanoMainNet
-
     # Create an instanse of CardanoTestNet object.
     # Using of SDK is a calling methods on such object.
     #

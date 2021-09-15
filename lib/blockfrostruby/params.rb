@@ -12,7 +12,7 @@ module Params
     # It exctracts only permitted params, validates them, compares with params defined in config.
     # If param = default API param (ex. count = 100 ) and it shouldn't be added to the url, the method cut this param.
     # Also if there is no parallel_requests passing, it adds the parallel_requests value from object config.
-    #   
+    #
     # @param params [Hash] includes passed hash to constructor.
     # @return [Hash] hash with valid params.
     def define_params(params, config)

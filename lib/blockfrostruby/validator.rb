@@ -7,8 +7,8 @@ module Validator
   class << self
     # rubocop:disable Metrics/AbcSize
 
-    # Validates params, which is passed to instanse of Net subclass object. 
-    # Callings from Params module. 
+    # Validates params, which is passed to instanse of Net subclass object.
+    # Callings from Params module.
     # If params don't meet specific conditions, it raise an ArgumentError.
     #
     # @param params [Hash] includes passed params.
@@ -29,7 +29,7 @@ module Validator
     end
     # rubocop:enable Metrics/AbcSize
 
-    # Validates config, which is passed to constructor of instanse of Net subclass object. 
+    # Validates config, which is passed to constructor of instanse of Net subclass object.
     # If params don't meet specific conditions, it raise an ArgumentError.
     #
     # @param config [Hash] includes passed params.
