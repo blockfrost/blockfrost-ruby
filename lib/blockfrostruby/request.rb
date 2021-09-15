@@ -16,7 +16,7 @@ module Request
     # @param url [String] the url to request.
     # @param project_id [String] the project_id to pass to url in headers.
     # @param params [Hash] params to add to request, allowed :order, :page, :count, :from, :to.
-    # @return [Hash] formatted result with {:status, :body}.
+    # @return [Hash] formatted result with status and body keys.
     def get_response(url, project_id, params = {})
       params[:from_page] ? get_pages_multi(url, project_id, params) : get_response_from_url(url, project_id, params)
     end
@@ -25,7 +25,7 @@ module Request
     #
     # @param url [String] the url to request.
     # @param project_id [String] the project_id to pass to url in headers.
-    # @return [Hash] formatted result with {:status, :body}.
+    # @return [Hash] formatted result with status and body keys.
     def post_request_raw(url, project_id)
       uri = URI(url)
       request = create_post_request(uri, project_id)
@@ -39,7 +39,7 @@ module Request
     # @param url [String] the url to request.
     # @param project_id [String] the project_id to pass to url in headers.
     # @param body [String] for pass to url.
-    # @return [Hash] formatted result with {:status, :body}.
+    # @return [Hash] formatted result with status and body keys.
     def post_request_cbor(url, project_id, body)
       uri = URI(url)
       request = create_post_request(uri, project_id)
@@ -54,7 +54,7 @@ module Request
     # @param url [String] the url to request.
     # @param project_id [String] the project_id to pass to url in headers.
     # @param filepath [String] path to file for uploading.
-    # @return [Hash] formatted result with {:status, :body}.
+    # @return [Hash] formatted result with status and body keys.
     def post_file(url, project_id, filepath)
       uri = URI(url)
       file = [['upload', File.open(filepath)]]

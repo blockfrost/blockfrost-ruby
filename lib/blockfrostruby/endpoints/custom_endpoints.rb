@@ -11,7 +11,7 @@ module CustomEndpoints
   #
   # @param custom_url [string] url to request. Url from object will be added before this param.
   # @param params [Hash] - params passed by user.
-  # @return [Hash] formatted result with {:status, :body}.
+  # @return [Hash] formatted result with status and body keys.
   def get_custom_url(custom_url, params = {})
     params = Params.define_params(params, @config)
     Request.get_response("#{@url}/#{custom_url}", @project_id, params)
