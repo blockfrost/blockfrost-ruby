@@ -14,7 +14,7 @@ module Params
     # Also if there is no parallel_requests passing, it adds the parallel_requests value from object config.
     #   
     # @param params [Hash] includes passed hash to constructor.
-    # @return [Hash] with valid params.
+    # @return [Hash] hash with valid params.
     def define_params(params, config)
       result = extract_params(params)
       Validator.validate_params(result)
