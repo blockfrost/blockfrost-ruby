@@ -54,6 +54,12 @@ module Blockfrostruby
     include TransactionsEndpoints
     include NutlinkEndpoints
 
+    # Create an instanse of CardanoMainNet object.
+    # Using of SDK is a calling methods on such object.
+    #
+    # @param project_id [String] the project_id from API
+    # @param config [Hash] a config with params: use_asc_order_as_default, default_count_per_page, parallel_requests, sleep_between_retries_ms
+    # @return [Object] with attr_reader :config, :project_id, :url
     def initialize(project_id, config = {})
       super
       @url = CARDANO_MAINNET_URL
@@ -61,6 +67,12 @@ module Blockfrostruby
   end
 
   class CardanoTestNet < CardanoMainNet
+    # Create an instanse of CardanoTestNet object.
+    # Using of SDK is a calling methods on such object.
+    #
+    # @param project_id [String] the project_id from API
+    # @param config [Hash] a config with params: use_asc_order_as_default, default_count_per_page, parallel_requests, sleep_between_retries_ms
+    # @return [Object] with attr_reader :config, :project_id, :url
     def initialize(project_id, config = {})
       super
       @url = CARDANO_TESTNET_URL
@@ -70,6 +82,12 @@ module Blockfrostruby
   class IPFS < Net
     include IPFSEndpoints
 
+    # Create an instanse of IPFS object.
+    # Using of SDK is a calling methods on such object.
+    #
+    # @param project_id [String] the project_id from API
+    # @param config [Hash] a config with params: use_asc_order_as_default, default_count_per_page, parallel_requests, sleep_between_retries_ms
+    # @return [Object] with attr_reader :config, :project_id, :url
     def initialize(project_id, config = {})
       super
       @url = IPFS_URL

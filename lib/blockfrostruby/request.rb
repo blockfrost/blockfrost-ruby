@@ -10,10 +10,22 @@ module Request
   include Blockfrostruby
 
   class << self
+    # Get response from passed URL, add params to request, add specific headers and format the response.
+    # If [:from_page] specified, calls the concurrent fetching process, else get response from single page.
+    #
+    # @param url [String] the url to request.
+    # @param project_id [String] the project_id to pass to url in headers.
+    # @param params [Hash] params to add to request, allowed :order, :page, :count, :from, :to.
+    # @return [Hash] formatted result with status and body keys.
     def get_response(url, project_id, params = {})
       params[:from_page] ? get_pages_multi(url, project_id, params) : get_response_from_url(url, project_id, params)
     end
 
+    # Post raw request to url, with no body or params.
+    #
+    # @param url [String] the url to request.
+    # @param project_id [String] the project_id to pass to url in headers.
+    # @return [Hash] formatted result with status and body keys.
     def post_request_raw(url, project_id)
       uri = URI(url)
       request = create_post_request(uri, project_id)
@@ -22,6 +34,12 @@ module Request
       format_response(response)
     end
 
+    # Post request to url, in application/cbor format with body.
+    #
+    # @param url [String] the url to request.
+    # @param project_id [String] the project_id to pass to url in headers.
+    # @param body [String] for pass to url.
+    # @return [Hash] formatted result with status and body keys.
     def post_request_cbor(url, project_id, body)
       uri = URI(url)
       request = create_post_request(uri, project_id)
@@ -31,6 +49,12 @@ module Request
       format_response(response)
     end
 
+    # Post file to url, in multipart/form-data.
+    #
+    # @param url [String] the url to request.
+    # @param project_id [String] the project_id to pass to url in headers.
+    # @param filepath [String] path to file for uploading.
+    # @return [Hash] formatted result with status and body keys.
     def post_file(url, project_id, filepath)
       uri = URI(url)
       file = [['upload', File.open(filepath)]]
@@ -158,9 +182,7 @@ module Request
         break if stops == true
 
         numbers.sort!
-        if numbers != numbers.uniq
-          raise 'The response includes duplicated results, reduce the number of parallel_requests and try again'
-        end
+        raise 'The response includes duplicated results, reduce the number of parallel_requests and try again' if numbers != numbers.uniq
       end
       responses.sort! { |el1, el2| el1[:page_number] <=> el2[:page_number] }.map! { |el| el[:response] }
       format_pages_results(responses)
