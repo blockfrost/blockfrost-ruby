@@ -2,7 +2,7 @@
 
 # gem build blockfrost-ruby
 # gem install ./blockfrost-ruby-0.1.0.gem
-# require 'blockfrostruby'
+# require 'blockfrost-ruby'
 # blockfrost = Blockfrostruby::CardanoMainNet.new()
 
 require_relative 'blockfrostruby/version'

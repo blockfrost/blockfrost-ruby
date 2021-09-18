@@ -33,7 +33,7 @@ And here are examples of how to use this SDK.
 
 ```ruby
 
-require 'blockfrostruby'
+require 'blockfrost-ruby'
 
 blockfrost = Blockfrostruby::CardanoMainNet.new('your-API-key')
 blockfrost.get_health
@@ -68,7 +68,7 @@ blockfrost_configured.get_block_latest_transactions({ count: 20 }) # will add or
 
 # 1. Install the gem and require it
 
-require 'blockfrostruby'
+require 'blockfrost-ruby'
 
 
 # 2. Initialize the object with the network:
