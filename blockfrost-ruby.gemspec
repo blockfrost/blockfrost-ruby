@@ -3,7 +3,7 @@
 require_relative 'lib/blockfrostruby/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'blockfrostruby'
+  spec.name          = 'blockfrost-ruby'
   spec.version       = Blockfrostruby::VERSION
   spec.authors       = ['Ivan (https://github.com/18bitmood)']
   spec.email         = ['ivan.papushoi@mail.ru']
