@@ -70,13 +70,21 @@ module Request
       content_type = response.header.content_type
       able_to_parse = ['application/json', 'application/octet-stream'].include?(content_type)
       body = able_to_parse ? JSON.parse(response.body) : response.body
-      case body
-      when Array
-        body = body.map { |el| el.transform_keys(&:to_sym) }
-      when Hash
-        body = body.transform_keys(&:to_sym)
-      end
+      body = format_keys_to_symbols(body)
       { status: response.code.to_i, body: body }
+    end
+
+    def format_keys_to_symbols(body)
+      return body unless body.is_a?(Array) || body.is_a?(Hash)
+
+      if body.is_a?(Array)
+        result = body.map do |element|
+          element = element.transform_keys(&:to_sym) if element.is_a?(Hash)
+          element
+        end
+      end
+      result = body.transform_keys(&:to_sym) if body.is_a?(Hash)
+      result
     end
 
     def add_params_to_url(url, params)

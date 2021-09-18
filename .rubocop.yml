@@ -13,6 +13,12 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Max: 240
 
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/PerceivedComplexity:
+  Max: 10
+
 # Documentation
 
 Style/Documentation:
