@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# gem build blockfrostruby
-# gem install ./blockfrostruby-0.1.0.gem
+# gem build blockfrost-ruby
+# gem install ./blockfrost-ruby-0.1.0.gem
 # require 'blockfrostruby'
 # blockfrost = Blockfrostruby::CardanoMainNet.new()
 

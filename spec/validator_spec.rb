@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/blockfrostruby'
+require_relative '../lib/blockfrost-ruby'
 require_relative '../lib/blockfrostruby/validator'
 require_relative '../lib/blockfrostruby/constants'
 

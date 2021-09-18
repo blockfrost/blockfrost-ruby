@@ -20,8 +20,8 @@ To do this, download this repo to your machine, then go to the directory:
 And run next commands:
 
     $ git add .
-    $ gem build blockfrostruby
-    $ gem install ./blockfrostruby-0.1.0.gem
+    $ gem build blockfrost-ruby
+    $ gem install ./blockfrost-ruby-0.1.0.gem
 
 That's it! You may use the gem in your projects.
 
