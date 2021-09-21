@@ -1,21 +1,28 @@
-# Blockfrostruby
+[![Gem Version](https://badge.fury.io/rb/blockfrost-ruby.svg)](https://rubygems.org/gems/blockfrost-ruby)  <a href="https://fivebinaries.com/"><img src="https://img.shields.io/badge/made%20by-Five%20Binaries-darkviolet.svg?style=flat-square" /></a>
 
-Ruby SDK to work with Blockfrost (Cardano Blockchain API)
-Blockfrost is a hosted API as a service serving the data from the Cardano blockchain.
-This gem is Ruby SDK for Blockfrost.io to enable developers
-to use full power of this API without having to create basic functions for it.
-The OpenAPI documentation is hosted at https://github.com/blockfrost/openapi.\
-This gem is licensed under ASL 2.0.
+<img src="https://blockfrost.io/images/logo.svg" width="250" align="right" height="90">
 
-More information about using this API can be found on https://docs.blockfrost.io/
+# blockfrost-ruby
+
+<br/>
+
+<p align="center">Ruby SDK for <a href="https://blockfrost.io">Blockfrost.io</a> API.</p>
+<p align="center">
+  <a href="#installation">Installation</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#development">Development</a>
+</p>
+<br>
+
 ## Installation
 
-For now, it's not hosted on a RubyGems,
-so you can install this SDK only from this repo.
+You can download the latest release directly from rubygems.org:
 
-To do this, download this repo to your machine, then go to the directory:
+    $ gem install blockfrost-ruby
 
-    $ cd path-to-dir-with-this-repo
+To build the current master, download this repo to your machine, then go to the directory:
+
+    $ cd blockfrost-ruby
 
 And run next commands:
 
@@ -131,4 +138,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/blockfrost/blockfrostruby.
+Bug reports and pull requests are welcome on GitHub at https://github.com/blockfrost/blockfrost-ruby.
