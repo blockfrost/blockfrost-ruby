@@ -30,73 +30,302 @@ RSpec.describe HealthEndpoints do
             response = blockfrost_mainnet.get_account_address(invalid_address)
             expect(response[:status]).to eq(400)
             expect(response[:body]).to include(:error)
-            # expect(response[:body]).to include(:active, :active_epoch, :pool_id)
           end
         end
       end
 
-      # context 'when calls get_root method' do
-      #   it 'return status 200 and response includes an url' do
-      #     response = blockfrost_mainnet.get_root
-      #     expect(response[:status]).to eq(200)
-      #     expect(response[:body]).to include(:url =>"https://blockfrost.io/")
-      #   end
-      # end
+      context 'when calls get_account_rewards method' do
+        context 'with valid address' do 
+          context 'without params' do
+            it 'returns status 200' do
+              response = blockfrost_mainnet.get_account_rewards(valid_address)
+              expect(response[:status]).to eq(200)
+            end
+          end
+          context 'with params' do
+            it 'returns status 200' do
+              response = blockfrost_mainnet.get_account_rewards(valid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(200)
+            end
+          end
+        end
 
-      # context 'when calls get_health_clock method' do
-      #   it 'return status 200 and response includes a server time' do
-      #     response = blockfrost_mainnet.get_health_clock
-      #     expect(response[:status]).to eq(200)
-      #     expect(response[:body]).to include(:server_time)
-      #   end
-      # end
+        context 'with invalid address' do 
+          context 'without params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_rewards(invalid_address)
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+          context 'with params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_rewards(invalid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+        end
+      end
+
+      context 'when calls get_account_history method' do
+        context 'with valid address' do 
+          context 'without params' do
+            it 'returns status 200, response body items count > 1 and item includes pool_id' do
+              response = blockfrost_mainnet.get_account_history(valid_address)
+              expect(response[:status]).to eq(200)
+              expect(response[:body].count).to be > 1
+              expect(response[:body][0]).to include(:pool_id)
+            end
+          end
+          context 'with params' do
+            it 'returns status 200, response body items count = 10 and item includes pool_id' do
+              response = blockfrost_mainnet.get_account_history(valid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(200)
+              expect(response[:body].count).to eq 10
+              expect(response[:body][0]).to include(:pool_id)
+            end
+          end
+        end
+
+        context 'with invalid address' do 
+          context 'without params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_history(invalid_address)
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+          context 'with params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_history(invalid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+        end
+      end
+
+
+      context 'when calls get_account_delegations method' do
+        context 'with valid address' do 
+          context 'without params' do
+            it 'returns status 200, response body item includes pool_id' do
+              response = blockfrost_mainnet.get_account_delegations(valid_address)
+              expect(response[:status]).to eq(200)
+              expect(response[:body][0]).to include(:pool_id)
+            end
+          end
+          context 'with params' do
+            it 'returns status 200' do
+              response = blockfrost_mainnet.get_account_delegations(valid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(200)
+            end
+          end
+        end
+
+        context 'with invalid address' do 
+          context 'without params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_delegations(invalid_address)
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+          context 'with params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_delegations(invalid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+        end
+      end
+
+      context 'when calls get_account_registrations method' do
+        context 'with valid address' do 
+          context 'without params' do
+            it 'returns status 200, response body item includes tx_hash' do
+              response = blockfrost_mainnet.get_account_registrations(valid_address)
+              expect(response[:status]).to eq(200)
+              expect(response[:body][0]).to include(:tx_hash)
+            end
+          end
+          context 'with params' do
+            it 'returns status 200' do
+              response = blockfrost_mainnet.get_account_registrations(valid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(200)
+            end
+          end
+        end
+
+        context 'with invalid address' do 
+          context 'without params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_registrations(invalid_address)
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+          context 'with params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_registrations(invalid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+        end
+      end
+
+      context 'when calls get_account_withdrawals method' do
+        context 'with valid address' do 
+          context 'without params' do
+            it 'returns status 200' do
+              response = blockfrost_mainnet.get_account_withdrawals(valid_address)
+              expect(response[:status]).to eq(200)
+            end
+          end
+          context 'with params' do
+            it 'returns status 200' do
+              response = blockfrost_mainnet.get_account_withdrawals(valid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(200)
+            end
+          end
+        end
+
+        context 'with invalid address' do 
+          context 'without params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_withdrawals(invalid_address)
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+          context 'with params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_withdrawals(invalid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+        end
+      end
+
+      context 'when calls get_account_mirs method' do
+        context 'with valid address' do 
+          context 'without params' do
+            it 'returns status 200' do
+              response = blockfrost_mainnet.get_account_mirs(valid_address)
+              expect(response[:status]).to eq(200)
+            end
+          end
+          context 'with params' do
+            it 'returns status 200' do
+              response = blockfrost_mainnet.get_account_mirs(valid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(200)
+            end
+          end
+        end
+
+        context 'with invalid address' do 
+          context 'without params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_mirs(invalid_address)
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+          context 'with params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_mirs(invalid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+        end
+      end
+
+      context 'when calls get_account_assosiated_addresses method' do
+        context 'with valid address' do 
+          context 'without params' do
+            it 'returns status 200, response body items count > 1, item includes address' do
+              response = blockfrost_mainnet.get_account_assosiated_addresses(valid_address)
+              expect(response[:status]).to eq(200)
+              expect(response[:body].count).to be > 1
+              expect(response[:body][0]).to include(:address)
+            end
+          end
+          context 'with params' do
+            it 'returns status 200, response body items count = 5, item includes address' do
+              response = blockfrost_mainnet.get_account_assosiated_addresses(valid_address, { count: 5, page: 2 } )
+              expect(response[:status]).to eq(200)
+              expect(response[:body].count).to eq(5)
+              expect(response[:body][0]).to include(:address)
+            end
+          end
+        end
+
+        context 'with invalid address' do 
+          context 'without params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_assosiated_addresses(invalid_address)
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+          context 'with params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_assosiated_addresses(invalid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+        end
+      end
+
+
+      context 'when calls get_account_addresses_assets method' do
+        context 'with valid address' do 
+          context 'without params' do
+            it 'returns status 200' do
+              response = blockfrost_mainnet.get_account_addresses_assets(valid_address)
+              expect(response[:status]).to eq(200)
+            end
+          end
+          context 'with params' do
+            it 'returns status 200' do
+              response = blockfrost_mainnet.get_account_addresses_assets(valid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(200)
+            end
+          end
+        end
+
+        context 'with invalid address' do 
+          context 'without params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_addresses_assets(invalid_address)
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+          context 'with params' do
+            it 'returns status 400, response body includes error' do
+              response = blockfrost_mainnet.get_account_addresses_assets(invalid_address, { count: 10, page: 2 } )
+              expect(response[:status]).to eq(400)
+              expect(response[:body]).to include(:error)
+            end
+          end
+        end
+      end
     end
 
     context 'with invalid project_id' do 
-      # context 'when calls get_health method' do
-      #   it 'returns 403 status and body includes error' do 
-      #     response = blockfrost_mainnet_invalid.get_health
-      #     expect(response[:status]).to eq(403)
-      #     expect(response[:body]).to include(:error)
-      #   end
-      # end
-    end
-  end
-
-  context 'CardanoTestNet object' do
-    context 'with valid project_id' do
-      context 'when calls get_health method' do
-        # it 'return status 200 and is_healthy => true' do
-        #   response = blockfrost_testnet.get_health
-        #   expect(response[:status]).to eq(200)
-        #   expect(response[:body]).to eq({ is_healthy: true })
-        # end
-      end
-
-      context 'when calls get_root method' do
-        # it 'return status 200 and response includes an url' do
-        #   response = blockfrost_testnet.get_root
-        #   expect(response[:status]).to eq(200)
-        #   expect(response[:body]).to include(:url =>"https://blockfrost.io/")
-        # end
-      end
-
-      context 'when calls get_health_clock method' do
-        # it 'return status 200 and response includes a server time' do
-        #   response = blockfrost_testnet.get_health_clock
-        #   expect(response[:status]).to eq(200)
-        #   expect(response[:body]).to include(:server_time)
-        # end
-      end
-    end
-
-    context 'with invalid project_id' do 
-      context 'when calls get_health method' do
-        # it 'returns 403 status and body includes error' do 
-        #   response = blockfrost_testnet_invalid.get_health
-        #   expect(response[:status]).to eq(403)
-        #   expect(response[:body]).to include(:error)
-        # end
+      context 'when calls get_account_address method' do
+        it 'returns 403 status and body includes error' do 
+          response = blockfrost_mainnet_invalid.get_account_address(valid_address)
+          expect(response[:status]).to eq(403)
+          expect(response[:body]).to include(:error)
+        end
       end
     end
   end
