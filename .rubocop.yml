@@ -37,3 +37,6 @@ Naming/AccessorMethodName:
 
 Layout/LineLength:
   Max: 150
+
+Naming/FileName:
+  Enabled: false
