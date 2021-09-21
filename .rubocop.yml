@@ -5,7 +5,7 @@ AllCops:
 # Metrics
 
 Metrics/BlockLength:
-  Max: 240
+  Max: 350
 
 Metrics/MethodLength:
   Max: 30

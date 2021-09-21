@@ -24,7 +24,7 @@ RSpec.describe HealthEndpoints do
         it 'return status 200 and response includes an url' do
           response = blockfrost_mainnet.get_root
           expect(response[:status]).to eq(200)
-          expect(response[:body]).to include(:url =>"https://blockfrost.io/")
+          expect(response[:body]).to include(url: 'https://blockfrost.io/')
         end
       end
 
@@ -37,9 +37,9 @@ RSpec.describe HealthEndpoints do
       end
     end
 
-    context 'with invalid project_id' do 
+    context 'with invalid project_id' do
       context 'when calls get_health method' do
-        it 'returns 403 status and body includes error' do 
+        it 'returns 403 status and body includes error' do
           response = blockfrost_mainnet_invalid.get_health
           expect(response[:status]).to eq(403)
           expect(response[:body]).to include(:error)
@@ -62,7 +62,7 @@ RSpec.describe HealthEndpoints do
         it 'return status 200 and response includes an url' do
           response = blockfrost_testnet.get_root
           expect(response[:status]).to eq(200)
-          expect(response[:body]).to include(:url =>"https://blockfrost.io/")
+          expect(response[:body]).to include(url: 'https://blockfrost.io/')
         end
       end
 
@@ -75,9 +75,9 @@ RSpec.describe HealthEndpoints do
       end
     end
 
-    context 'with invalid project_id' do 
+    context 'with invalid project_id' do
       context 'when calls get_health method' do
-        it 'returns 403 status and body includes error' do 
+        it 'returns 403 status and body includes error' do
           response = blockfrost_testnet_invalid.get_health
           expect(response[:status]).to eq(403)
           expect(response[:body]).to include(:error)
