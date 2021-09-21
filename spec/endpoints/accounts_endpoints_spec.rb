@@ -7,8 +7,6 @@ require_relative '../../lib/blockfrostruby/endpoints/cardano/accounts_endpoints'
 RSpec.describe HealthEndpoints do
   let(:blockfrost_mainnet) { Blockfrostruby::CardanoMainNet.new(ENV['BF_MAINNET_PROJECT_ID']) }
   let(:blockfrost_mainnet_invalid) { Blockfrostruby::CardanoMainNet.new('invalid project_id') }
-  let(:blockfrost_testnet) { Blockfrostruby::CardanoTestNet.new(ENV['BF_TESTNET_PROJECT_ID']) }
-  let(:blockfrost_testnet_invalid) { Blockfrostruby::CardanoTestNet.new('invalid project_id') }
 
   let(:valid_address) { 'stake1u9ylzsgxaa6xctf4juup682ar3juj85n8tx3hthnljg47zctvm3rc' }
   let(:invalid_address) { 'invalid_adress' }
