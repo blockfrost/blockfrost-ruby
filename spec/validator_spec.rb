@@ -219,17 +219,17 @@ RSpec.describe Validator do
       end
     end
 
-    context 'with valid params' do
-      it 'not raises an ArgumentError' do
-        stub_cardano_success_request('/blocks/latest/txs?count=80&page=6', '{"answer": true}', 'project_id')
-        stub_cardano_success_request('/blocks/latest/txs?count=80&page=5', '{"answer": true}', 'project_id')
-        stub_cardano_success_request('/blocks/latest/txs?count=80&page=4', '{"answer": true}', 'project_id')
-        stub_cardano_success_request('/blocks/latest/txs?count=80&page=3', '{"answer": true}', 'project_id')
+    # context 'with valid params' do
+    #   it 'not raises an ArgumentError' do
+    #     stub_cardano_success_request('/blocks/latest/txs?count=80&page=6', '{"answer": true}', 'project_id')
+    #     stub_cardano_success_request('/blocks/latest/txs?count=80&page=5', '{"answer": true}', 'project_id')
+    #     stub_cardano_success_request('/blocks/latest/txs?count=80&page=4', '{"answer": true}', 'project_id')
+    #     stub_cardano_success_request('/blocks/latest/txs?count=80&page=3', '{"answer": true}', 'project_id')
 
-        params = { order: 'asc', count: 80, from_page: 3, to_page: 6,
-                   parallel_requests: 5, sleep_between_retries_ms: 200 }
-        expect { blockfrost.get_block_latest_transactions(params) }.not_to raise_error(ArgumentError)
-      end
-    end
+    #     params = { order: 'asc', count: 80, from_page: 3, to_page: 6,
+    #                parallel_requests: 5, sleep_between_retries_ms: 200 }
+    #     expect { blockfrost.get_block_latest_transactions(params) }.not_to raise_error(ArgumentError)
+    #   end
+    # end
   end
 end
