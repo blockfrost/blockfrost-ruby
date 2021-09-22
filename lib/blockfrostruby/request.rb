@@ -119,6 +119,7 @@ module Request
 
     def get_response_from_url(url, project_id, params = {})
       uri = URI(add_params_to_url(url, params))
+      puts uri
       request = create_get_request(uri, project_id)
       response = send_request(uri, request)
       format_response(response)
@@ -211,6 +212,7 @@ module Request
       result[:status] = responses.flatten.map { |r| r[:status] }[-1]
       result[:status] = result[:status].to_i if result[:status]
       result
+      nil
     end
   end
 end
