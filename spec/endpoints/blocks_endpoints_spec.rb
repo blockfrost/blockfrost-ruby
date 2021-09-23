@@ -172,7 +172,7 @@ RSpec.describe BlocksEndpoints do
     end
 
     context 'with invalid project_id' do
-      context 'when calls get_specific_asset method' do
+      context 'when calls get_block method' do
         it 'returns 403 status and body includes error' do
           response = blockfrost_mainnet_invalid.get_block(valid_hash_or_number)
           expect(response[:status]).to eq(403)

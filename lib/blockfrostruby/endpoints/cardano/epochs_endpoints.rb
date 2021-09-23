@@ -29,9 +29,8 @@ module EpochsEndpoints
   # @param epoch_number [String] will be added to the url for get request.
   # @param params [Hash] - params passed by user.
   # @return [Hash] formatted result with status and body keys.
-  def get_epoch(epoch_number, params = {})
-    params = Params.define_params(params, @config)
-    Request.get_response("#{@url}/epochs/#{epoch_number}", @project_id, params)
+  def get_epoch(epoch_number)
+    Request.get_response("#{@url}/epochs/#{epoch_number}", @project_id)
   end
 
   # Calls get request on (@url)/epochs/(epoch_number)/next.
