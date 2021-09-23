@@ -27,17 +27,15 @@ RSpec.describe BlocksEndpoints do
    
       context 'when calls get_block_latest_transactions method' do
         context 'without params' do
-          it 'returns status 200, response body item count > 1' do
+          it 'returns status 200' do
             response = blockfrost_mainnet.get_block_latest_transactions
             expect(response[:status]).to eq(200)
-            expect(response[:body].count).to be > 1
           end
         end
         context 'with params' do
-          it 'returns status 200, response body item count = 3' do
-            response = blockfrost_mainnet.get_block_latest_transactions({ count: 3, page: 2 })
+          it 'returns status 200' do
+            response = blockfrost_mainnet.get_block_latest_transactions({count: 3, page: 2})
             expect(response[:status]).to eq(200)
-            expect(response[:body].count).to eq 3
           end
         end
       end
@@ -64,7 +62,7 @@ RSpec.describe BlocksEndpoints do
     context 'with invalid project_id' do
       context 'when calls get_specific_asset method' do
         it 'returns 403 status and body includes error' do
-          response = blockfrost_mainnet_invalid.get_specific_asset(valid_asset)
+          response = blockfrost_mainnet_invalid.get_specific_asset(valid_hash_or_number)
           expect(response[:status]).to eq(403)
           expect(response[:body]).to include(:error)
         end
