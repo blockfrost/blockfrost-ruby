@@ -34,7 +34,7 @@ RSpec.describe BlocksEndpoints do
         end
         context 'with params' do
           it 'returns status 200' do
-            response = blockfrost_mainnet.get_block_latest_transactions({count: 3, page: 2})
+            response = blockfrost_mainnet.get_block_latest_transactions({ count: 3, page: 2 })
             expect(response[:status]).to eq(200)
           end
         end
@@ -116,7 +116,6 @@ RSpec.describe BlocksEndpoints do
           end
         end
       end
-
 
       context 'when calls get_list_of_previous_blocks method' do
         context 'with valid hash_or_number' do
