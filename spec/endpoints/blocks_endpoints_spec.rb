@@ -66,7 +66,7 @@ RSpec.describe BlocksEndpoints do
         end
         context 'with invalid slot number' do
           it 'returns status 404, response body includes error' do
-            skip
+            skip 'Returns 500 instead of 404'
             response = blockfrost_mainnet.get_block_in_slot(invalid_slot_number)
             expect(response[:status]).to eq(404)
             expect(response[:body]).to include(:error)
@@ -83,7 +83,7 @@ RSpec.describe BlocksEndpoints do
         end
         context 'with invalid slot and epoch number' do
           it 'returns status 404, response body includes error' do
-            skip
+            skip 'Returns 500 instead of 404'
             response = blockfrost_mainnet.get_block_in_slot_in_epoch(invalid_slot_number, invalid_epoch_number)
             expect(response[:status]).to eq(404)
             expect(response[:body]).to include(:error)
