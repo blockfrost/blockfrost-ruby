@@ -4,7 +4,7 @@ require_relative '../../lib/blockfrost-ruby'
 require_relative '../../lib/blockfrostruby/constants'
 require_relative '../../lib/blockfrostruby/endpoints/cardano/epochs_endpoints'
 
-RSpec.describe EpochsEndpoints do
+RSpec.describe MetadataEndpoints do
   let(:blockfrost_mainnet) { Blockfrostruby::CardanoMainNet.new(ENV['BF_MAINNET_PROJECT_ID']) }
   let(:blockfrost_mainnet_invalid) { Blockfrostruby::CardanoMainNet.new('invalid project_id') }
 
