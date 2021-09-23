@@ -54,7 +54,7 @@ module AccountsEndpoints
   # @return [Hash] formatted result with status and body keys.
   def get_account_registrations(address, params = {})
     params = Params.define_params(params, @config)
-    Request.get_response("#{@url}/accounts/#{address}/registations", @project_id, params)
+    Request.get_response("#{@url}/accounts/#{address}/registrations", @project_id, params)
   end
 
   # Calls get request on (@url)/accounts/(address)/withdrawals.
@@ -82,9 +82,9 @@ module AccountsEndpoints
   # @param address [String] will be added to the url for get request.
   # @param params [Hash] - params passed by user.
   # @return [Hash] formatted result with status and body keys.
-  def get_account_addresses(address, params = {})
+  def get_account_assosiated_addresses(address, params = {})
     params = Params.define_params(params, @config)
-    Request.get_response("#{@url}/accounts/#{address}/addresses", @project_id, params, @config)
+    Request.get_response("#{@url}/accounts/#{address}/addresses", @project_id, params)
   end
 
   # Calls get request on (@url)/accounts/(address)/addresses/assets.

@@ -13,7 +13,7 @@ module AddressesEndpoints
   #
   # @param address [String] will be added to the url for get request.
   # @return [Hash] formatted result with status and body keys.
-  def get_address(address)
+  def get_specific_address(address)
     Request.get_response("#{@url}/addresses/#{address}", @project_id)
   end
 

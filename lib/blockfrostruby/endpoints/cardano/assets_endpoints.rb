@@ -23,9 +23,8 @@ module AssetsEndpoints
   # @param asset [String] will be added to the url for get request.
   # @param params [Hash] - params passed by user.
   # @return [Hash] formatted result with status and body keys.
-  def get_asset(asset, params = {})
-    params = Params.define_params(params, @config)
-    Request.get_response("#{@url}/assets/#{asset}", @project_id, params)
+  def get_specific_asset(asset)
+    Request.get_response("#{@url}/assets/#{asset}", @project_id)
   end
 
   # Calls get request on (@url)/assets/(asset)/history.
