@@ -10,7 +10,7 @@ RSpec.describe PoolsEndpoints do
 
   let(:valid_pool_id) { 'pool1llxh8l0h8g9ghz3nrzh7ndvev4x43vnk72nsemzm795vxqs6dp8' }
   let(:invalid_pool_id) { 'invalid_number' }
-  
+
   context 'CardanoMainNet object' do
     context 'with valid project_id' do
       context 'when calls get_pools method' do
@@ -204,11 +204,3 @@ RSpec.describe PoolsEndpoints do
     end
   end
 end
-
-# context 'with invalid address' do
-#   it 'returns status 404, response body includes error' do
-#     response = blockfrost_mainnet.get_address_metadata_list(invalid_address)
-#     expect(response[:status]).to eq(400)
-#     expect(response[:body]).to include(:error)
-#   end
-# end
