@@ -51,11 +51,12 @@ RSpec.describe IPFSEndpoints do
             sleep 10
             response = blockfrost_ipfs.pin_an_object(ipfs_path)
             expect(response[:status]).to eq(200)
+            sleep 10
           end
         end
         context 'when calls get_localstorage_pinned_object method' do
           it 'returns status 200 and response body ipfs hash is eq path from add_a_file' do
-            sleep 10 # To make sure that pin_object method finished work
+            sleep 20 # To make sure that pin_object method finished work
             response = blockfrost_ipfs.get_localstorage_pinned_object(ipfs_path)
             puts "\n" * 3
             puts response
