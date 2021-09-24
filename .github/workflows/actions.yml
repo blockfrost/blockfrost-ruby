@@ -1,0 +1,25 @@
+name: Test Ruby SDK
+
+on: [ push ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        ruby-version: [3.0.1, 2.7.3, 2.6.7, 2.5.9]
+    env:
+      BF_TESTNET_PROJECT_ID: ${{secrets.BF_TESTNET_PROJECT_ID}}
+      BF_MAINNET_PROJECT_ID: ${{secrets.BF_MAINNET_PROJECT_ID}}
+      BF_IPFS_PROJECT_ID: ${{secrets.BF_IPFS_PROJECT_ID}}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@477b21f02be01bcb8030d50f37cfec92bfa615b6
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      - name: Install dependencies
+        run: bundle install
+      - name: Run tests
+        run: bundle exec rspec ./spec
