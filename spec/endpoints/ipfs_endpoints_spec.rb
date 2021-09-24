@@ -38,7 +38,7 @@ RSpec.describe IPFSEndpoints do
             puts "\n" * 3
             puts Dir.pwd
             puts "\n" * 3
-            response = blockfrost_ipfs.add_a_file('./README.md')
+            response = blockfrost_ipfs.add_a_file('./Gemfile')
             expect(response[:status]).to eq(200)
             ipfs_path = response[:body][:ipfs_hash]
           end
