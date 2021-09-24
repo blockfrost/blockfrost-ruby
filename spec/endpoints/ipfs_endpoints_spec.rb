@@ -48,6 +48,7 @@ RSpec.describe IPFSEndpoints do
         end
         context 'when calls pin_an_object method' do
           it 'returns status 200' do
+            sleep 10
             response = blockfrost_ipfs.pin_an_object(ipfs_path)
             expect(response[:status]).to eq(200)
           end
