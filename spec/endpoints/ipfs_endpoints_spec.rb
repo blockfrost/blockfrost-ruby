@@ -54,7 +54,7 @@ RSpec.describe IPFSEndpoints do
         end
         context 'when calls get_localstorage_pinned_object method' do
           it 'returns status 200 and response body ipfs hash is eq path from add_a_file' do
-            sleep 5 # To make sure that pin_object method finished work
+            sleep 10 # To make sure that pin_object method finished work
             response = blockfrost_ipfs.get_localstorage_pinned_object(ipfs_path)
             puts "\n" * 3
             puts response
@@ -72,7 +72,7 @@ RSpec.describe IPFSEndpoints do
         end
         context 'when calls get_localstorage_pinned_objects_list method' do
           it 'returns status 200 and response body doesn\'t include hash from add a file' do
-            sleep 1 # To make sure that remove_pinned_object method finished work
+            sleep 10 # To make sure that remove_pinned_object method finished work
             response = blockfrost_ipfs.get_localstorage_pinned_objects_list
             expect(response[:status]).to eq(200)
             pinned_hashes = response[:body].map { |el| el[:ipfs_hash] }
