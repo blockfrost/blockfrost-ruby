@@ -41,6 +41,9 @@ RSpec.describe IPFSEndpoints do
             response = blockfrost_ipfs.add_a_file('./Gemfile')
             expect(response[:status]).to eq(200)
             ipfs_path = response[:body][:ipfs_hash]
+            puts "\n" * 3
+            puts ipfs_path
+            puts "\n" * 3
           end
         end
         context 'when calls pin_an_object method' do
