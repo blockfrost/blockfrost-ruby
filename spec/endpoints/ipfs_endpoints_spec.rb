@@ -32,6 +32,7 @@ RSpec.describe IPFSEndpoints do
       # RUN ONLY WHOLE CONTEXT
       # Check
       # Check second
+      # Check third
 
       context 'when calls add, pin, get and remove object step-by-step' do
         ipfs_path = ''
