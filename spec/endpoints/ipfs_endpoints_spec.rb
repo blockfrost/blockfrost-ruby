@@ -35,35 +35,23 @@ RSpec.describe IPFSEndpoints do
         ipfs_path = ''
         context 'when calls add_a_file method' do
           it 'returns status 200' do
-            puts "\n" * 3
-            puts Dir.pwd
-            puts "\n" * 3
             response = blockfrost_ipfs.add_a_file('./Gemfile')
             expect(response[:status]).to eq(200)
             ipfs_path = response[:body][:ipfs_hash]
-            puts "\n" * 3
-            puts ipfs_path
-            puts "\n" * 3
           end
         end
         context 'when calls pin_an_object method' do
           it 'returns status 200' do
-            sleep 10
             response = blockfrost_ipfs.pin_an_object(ipfs_path)
             expect(response[:status]).to eq(200)
-            sleep 10
           end
         end
         context 'when calls get_localstorage_pinned_object method' do
           it 'returns status 200 and response body ipfs hash is eq path from add_a_file' do
-            sleep 20 # To make sure that pin_object method finished work
+            sleep 3 # To make sure that pin_object method finished work
             response = blockfrost_ipfs.get_localstorage_pinned_object(ipfs_path)
-            puts "\n" * 3
-            puts response
-            puts "\n" * 3 
             expect(response[:status]).to eq(200)
             expect(response[:body][:ipfs_hash]).to eq(ipfs_path)
-            sleep 10
           end
         end
         context 'when calls remove pinned_object method' do
@@ -75,7 +63,7 @@ RSpec.describe IPFSEndpoints do
         end
         context 'when calls get_localstorage_pinned_objects_list method' do
           it 'returns status 200 and response body doesn\'t include hash from add a file' do
-            sleep 20 # To make sure that remove_pinned_object method finished work
+            sleep 3 # To make sure that remove_pinned_object method finished work
             response = blockfrost_ipfs.get_localstorage_pinned_objects_list
             expect(response[:status]).to eq(200)
             pinned_hashes = response[:body].map { |el| el[:ipfs_hash] }
