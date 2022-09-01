@@ -5,8 +5,6 @@
 # require 'blockfrost-ruby'
 # blockfrost = Blockfrostruby::CardanoMainNet.new()
 
-require 'dotenv/load'
-
 require_relative 'blockfrostruby/version'
 require_relative 'blockfrostruby/constants'
 require_relative 'blockfrostruby/configuration'

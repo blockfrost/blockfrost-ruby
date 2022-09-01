@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'dotenv/load'
 require 'blockfrost-ruby'
 
 RSpec.configure do |config|
