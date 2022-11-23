@@ -79,6 +79,32 @@ module Blockfrostruby
     end
   end
 
+  class CardanoPreview < CardanoMainNet
+    # Create an instanse of CardanoPreview object.
+    # Using of SDK is a calling methods on such object.
+    #
+    # @param project_id [String] the project_id from API
+    # @param config [Hash] a config with params: use_asc_order_as_default, default_count_per_page, parallel_requests, sleep_between_retries_ms
+    # @return [Object] with attr_reader :config, :project_id, :url
+    def initialize(project_id, config = {})
+      super
+      @url = CARDANO_PREVIEW_URL
+    end
+  end
+
+  class CardanoPreprod < CardanoMainNet
+    # Create an instanse of CardanoPreprod object.
+    # Using of SDK is a calling methods on such object.
+    #
+    # @param project_id [String] the project_id from API
+    # @param config [Hash] a config with params: use_asc_order_as_default, default_count_per_page, parallel_requests, sleep_between_retries_ms
+    # @return [Object] with attr_reader :config, :project_id, :url
+    def initialize(project_id, config = {})
+      super
+      @url = CARDANO_PREPROD_URL
+    end
+  end
+
   class IPFS < Net
     include IPFSEndpoints
 
