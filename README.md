@@ -85,6 +85,8 @@ blockfrost_mainnet = Blockfrostruby::CardanoMainNet.new('your-API-key')
 # Or if you want to access other networks: 
 
 blockfrost_testnet = Blockfrostruby::CardanoTestNet.new('your-API-key')
+blockfrost_preview = Blockfrostruby::CardanoPreview.new('your-API-key')
+blockfrost_preprod = Blockfrostruby::CardanoPreprod.new('your-API-key')
 blockfrost_ipfs = Blockfrostruby::IPFS.new('your-API-key')
 
 
