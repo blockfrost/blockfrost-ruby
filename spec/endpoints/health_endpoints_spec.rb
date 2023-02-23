@@ -7,8 +7,8 @@ require_relative '../../lib/blockfrostruby/endpoints/cardano/health_endpoints'
 RSpec.describe HealthEndpoints do
   let(:blockfrost_mainnet) { Blockfrostruby::CardanoMainNet.new(ENV['BF_MAINNET_PROJECT_ID']) }
   let(:blockfrost_mainnet_invalid) { Blockfrostruby::CardanoMainNet.new('invalid project_id') }
-  let(:blockfrost_testnet) { Blockfrostruby::CardanoTestNet.new(ENV['BF_TESTNET_PROJECT_ID']) }
-  let(:blockfrost_testnet_invalid) { Blockfrostruby::CardanoTestNet.new('invalid project_id') }
+  let(:blockfrost_testnet) { Blockfrostruby::CardanoPreview.new(ENV['BF_TESTNET_PROJECT_ID']) }
+  let(:blockfrost_testnet_invalid) { Blockfrostruby::CardanoPreview.new('invalid project_id') }
 
   context 'CardanoMainNet object' do
     context 'with valid project_id' do
@@ -39,16 +39,16 @@ RSpec.describe HealthEndpoints do
 
     context 'with invalid project_id' do
       context 'when calls get_health method' do
-        it 'returns 403 status and body includes error' do
+        it 'return status 200 and is_healthy => true' do
           response = blockfrost_mainnet_invalid.get_health
-          expect(response[:status]).to eq(403)
-          expect(response[:body]).to include(:error)
+          expect(response[:status]).to eq(200)
+          expect(response[:body]).to eq({ is_healthy: true })
         end
       end
     end
   end
 
-  context 'CardanoTestNet object' do
+  context 'CardanoPreview object' do
     context 'with valid project_id' do
       context 'when calls get_health method' do
         it 'return status 200 and is_healthy => true' do
@@ -77,10 +77,10 @@ RSpec.describe HealthEndpoints do
 
     context 'with invalid project_id' do
       context 'when calls get_health method' do
-        it 'returns 403 status and body includes error' do
+        it 'return status 200 and is_healthy => true' do
           response = blockfrost_testnet_invalid.get_health
-          expect(response[:status]).to eq(403)
-          expect(response[:body]).to include(:error)
+          expect(response[:status]).to eq(200)
+          expect(response[:body]).to eq({ is_healthy: true })
         end
       end
     end

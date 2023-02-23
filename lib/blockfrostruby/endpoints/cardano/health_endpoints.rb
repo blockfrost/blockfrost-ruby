@@ -16,7 +16,7 @@ module HealthEndpoints
   #
   # @return [Hash] formatted result with status and body keys.
   def get_health
-    Request.get_response("#{@url}/health", @project_id)
+    Request.get_response("#{@url}/health")
   end
 
   # Calls get request on (@url)/health/clock.
