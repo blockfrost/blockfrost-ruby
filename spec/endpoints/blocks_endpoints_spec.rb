@@ -49,9 +49,9 @@ RSpec.describe BlocksEndpoints do
           end
         end
         context 'with invalid hash_or_number' do
-          it 'returns status 404, response body includes error' do
+          it 'returns status 400, response body includes error' do
             response = blockfrost_mainnet.get_block(invalid_hash_or_number)
-            expect(response[:status]).to eq(404)
+            expect(response[:status]).to eq(400)
             expect(response[:body]).to include(:error)
           end
         end
@@ -65,10 +65,9 @@ RSpec.describe BlocksEndpoints do
           end
         end
         context 'with invalid slot number' do
-          it 'returns status 404, response body includes error' do
-            skip 'Returns 500 instead of 404'
+          it 'returns status 400, response body includes error' do
             response = blockfrost_mainnet.get_block_in_slot(invalid_slot_number)
-            expect(response[:status]).to eq(404)
+            expect(response[:status]).to eq(400)
             expect(response[:body]).to include(:error)
           end
         end
@@ -82,10 +81,9 @@ RSpec.describe BlocksEndpoints do
           end
         end
         context 'with invalid slot and epoch number' do
-          it 'returns status 404, response body includes error' do
-            skip 'Returns 500 instead of 404'
+          it 'returns status 400, response body includes error' do
             response = blockfrost_mainnet.get_block_in_slot_in_epoch(invalid_slot_number, invalid_epoch_number)
-            expect(response[:status]).to eq(404)
+            expect(response[:status]).to eq(400)
             expect(response[:body]).to include(:error)
           end
         end
@@ -109,9 +107,9 @@ RSpec.describe BlocksEndpoints do
           end
         end
         context 'with invalid hash_or_number' do
-          it 'returns status 404, response body includes error' do
+          it 'returns status 400, response body includes error' do
             response = blockfrost_mainnet.get_list_of_next_blocks(invalid_hash_or_number)
-            expect(response[:status]).to eq(404)
+            expect(response[:status]).to eq(400)
             expect(response[:body]).to include(:error)
           end
         end
@@ -135,9 +133,9 @@ RSpec.describe BlocksEndpoints do
           end
         end
         context 'with invalid hash_or_number' do
-          it 'returns status 404, response body includes error' do
+          it 'returns status 400, response body includes error' do
             response = blockfrost_mainnet.get_list_of_previous_blocks(invalid_hash_or_number)
-            expect(response[:status]).to eq(404)
+            expect(response[:status]).to eq(400)
             expect(response[:body]).to include(:error)
           end
         end
@@ -161,9 +159,9 @@ RSpec.describe BlocksEndpoints do
           end
         end
         context 'with invalid hash_or_number' do
-          it 'returns status 404, response body includes error' do
+          it 'returns status 400, response body includes error' do
             response = blockfrost_mainnet.get_block_transactions(invalid_hash_or_number)
-            expect(response[:status]).to eq(404)
+            expect(response[:status]).to eq(400)
             expect(response[:body]).to include(:error)
           end
         end
