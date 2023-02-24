@@ -16,7 +16,11 @@
 
 ## Installation
 
-You can download the latest release directly from rubygems.org:
+Add the gem to your Gemfile
+
+    gem "blockfrost-ruby"
+
+Or download the latest release directly from rubygems.org:
 
     $ gem install blockfrost-ruby
 
@@ -34,7 +38,7 @@ That's it! You may use the gem in your projects.
 
 ## Usage
 
-To use this SDK, you first need login into blockfrost.io and create your project to retrieve your API token.
+To use this SDK, you first need to login into blockfrost.io and create your project to retrieve your API token.
 
 And here are examples of how to use this SDK.
 
@@ -84,7 +88,6 @@ blockfrost_mainnet = Blockfrostruby::CardanoMainNet.new('your-API-key')
 
 # Or if you want to access other networks: 
 
-blockfrost_testnet = Blockfrostruby::CardanoTestNet.new('your-API-key')
 blockfrost_preview = Blockfrostruby::CardanoPreview.new('your-API-key')
 blockfrost_preprod = Blockfrostruby::CardanoPreprod.new('your-API-key')
 blockfrost_ipfs = Blockfrostruby::IPFS.new('your-API-key')
@@ -126,6 +129,73 @@ blockfrost.get_block_latest_transactions({ count: 20 })
 # Example of request:
 
 blockfrost.get_list_of_next_blocks("hash_here", { count: 40, from_page: 11520, to_page: 11640, parallel_requests: 15 })
+
+# 5. Webhooks
+
+# Read about the available webhooks here: https://blockfrost.dev/docs/start-building/webhooks
+
+# This SDK provides a module BlockfrostRuby::Webhooks you can use as a mixin in your classes. It provides you with a method for verifying the signature sent with the webhook.
+
+# Example for Rails
+
+# config/routes.rb
+post "/webhook", to: "cardano_webhooks#create"
+
+# app/controllers/cardano_webhooks_controller.rb
+class CardanoWebhooksController < ApplicationController
+  include BlockfrostRuby::Webhooks
+
+  # You will find your webhook secret auth token in your webhook settings in the Blockfrost Dashboard
+  BLOCKFROST_SECRET_AUTH_TOKEN = "BLOCKFROST-SECRET-AUTH-TOKEN"
+
+  before_action :verify_request
+
+  def create
+    type = params.fetch("type")
+    payload = params.fetch('payload')
+
+    case type
+    when "transaction"
+      # payload is an array of Transaction events
+      payload.each do |tx|
+        puts "Transaction id: #{tx.dig 'tx', 'hash'}",
+             "block: #{tx.dig 'tx', 'block'} (#{tx.dig 'tx', 'block_height'})"
+      end
+    when "block"
+      # process Block event
+      puts "Received block hash #{payload['hash']}"
+    when "delegation"
+      # payload is an array of objects with fields: "tx" (an object) and "delegations" (an array)
+      payload.each do |tx|
+        tx['delegations'].each do |delegation|
+          puts "Delegation from an address #{delegation['address']} included in tx #{tx['tx']['hash']}"
+        end
+      end
+    when "epoch"
+      # process Epoch event
+      puts "Epoch switch from #{payload.dig 'previous_epoch', 'epoch'} to #{payload.dig 'current_epoch', 'epoch'}"
+    else
+      puts "Unexpected event type #{type}"
+    end
+
+    head 200
+  end
+
+  private
+
+  def verify_request
+    verify_webhook_signature(
+      request.raw_post,
+      request.headers['Blockfrost-Signature'],
+      BLOCKFROST_SECRET_AUTH_TOKEN
+    )
+
+  # In case of invalid signature SignatureVerificationError will be raised
+  rescue BlockfrostRuby::Webhooks::SignatureVerificationError => e
+    puts "Webhook signature is invalid. #{e.message}"
+    head 403 and return
+  end
+end
 
 # That's it! Enjoy
 
