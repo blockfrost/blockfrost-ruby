@@ -25,6 +25,8 @@ require_relative 'blockfrostruby/endpoints/cardano/nutlink_endpoints'
 require_relative 'blockfrostruby/endpoints/ipfs/ipfs_endpoints'
 require_relative 'blockfrostruby/endpoints/custom_endpoints'
 
+require_relative 'blockfrostruby/webhooks'
+
 module Blockfrostruby
   class Net
     include Configuration
