@@ -17,6 +17,14 @@ module AddressesEndpoints
     Request.get_response("#{@url}/addresses/#{address}", @project_id)
   end
 
+  # Calls get request on (@url)/addresses/(address)/extended.
+  #
+  # @param address [String] will be added to the url for get request.
+  # @return [Hash] formatted result with status and body keys.
+  def get_extended_address_info(address)
+    Request.get_response("#{@url}/addresses/#{address}/extended", @project_id)
+  end
+
   # Calls get request on (@url)/addresses/(address)/total.
   #
   # @param address [String] will be added to the url for get request.
