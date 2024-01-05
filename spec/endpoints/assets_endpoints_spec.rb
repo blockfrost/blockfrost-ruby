@@ -45,9 +45,9 @@ RSpec.describe AssetsEndpoints do
         end
 
         context 'with invalid asset' do
-          it 'returns status 404, response body includes error' do
+          it 'returns status 400, response body includes error' do
             response = blockfrost_mainnet.get_specific_asset(invalid_asset)
-            expect(response[:status]).to eq(404)
+            expect(response[:status]).to eq(400)
             expect(response[:body]).to include(:error)
           end
         end
@@ -72,16 +72,16 @@ RSpec.describe AssetsEndpoints do
 
         context 'with invalid asset' do
           context 'without params' do
-            it 'returns status 404, response body includes error' do
+            it 'returns status 400, response body includes error' do
               response = blockfrost_mainnet.get_asset_history(invalid_asset)
-              expect(response[:status]).to eq(404)
+              expect(response[:status]).to eq(400)
               expect(response[:body]).to include(:error)
             end
           end
           context 'with params' do
-            it 'returns status 404, response body includes error' do
+            it 'returns status 400, response body includes error' do
               response = blockfrost_mainnet.get_asset_history(invalid_asset, { count: 7, page: 3 })
-              expect(response[:status]).to eq(404)
+              expect(response[:status]).to eq(400)
               expect(response[:body]).to include(:error)
             end
           end
@@ -107,16 +107,16 @@ RSpec.describe AssetsEndpoints do
 
         context 'with invalid asset' do
           context 'without params' do
-            it 'returns status 404, response body includes error' do
+            it 'returns status 400, response body includes error' do
               response = blockfrost_mainnet.get_asset_transactions(invalid_asset)
-              expect(response[:status]).to eq(404)
+              expect(response[:status]).to eq(400)
               expect(response[:body]).to include(:error)
             end
           end
           context 'with params' do
-            it 'returns status 404, response body includes error' do
+            it 'returns status 400, response body includes error' do
               response = blockfrost_mainnet.get_asset_transactions(invalid_asset, { count: 7, page: 3 })
-              expect(response[:status]).to eq(404)
+              expect(response[:status]).to eq(400)
               expect(response[:body]).to include(:error)
             end
           end
@@ -142,16 +142,16 @@ RSpec.describe AssetsEndpoints do
 
         context 'with invalid asset' do
           context 'without params' do
-            it 'returns status 404, response body includes error' do
+            it 'returns status 400, response body includes error' do
               response = blockfrost_mainnet.get_asset_addresses(invalid_asset)
-              expect(response[:status]).to eq(404)
+              expect(response[:status]).to eq(400)
               expect(response[:body]).to include(:error)
             end
           end
           context 'with params' do
-            it 'returns status 404, response body includes error' do
+            it 'returns status 400, response body includes error' do
               response = blockfrost_mainnet.get_asset_addresses(invalid_asset, { count: 7, page: 3 })
-              expect(response[:status]).to eq(404)
+              expect(response[:status]).to eq(400)
               expect(response[:body]).to include(:error)
             end
           end
@@ -177,16 +177,16 @@ RSpec.describe AssetsEndpoints do
 
       context 'with invalid policy_id' do
         context 'without params' do
-          it 'returns status 404, response body includes error' do
+          it 'returns status 400, response body includes error' do
             response = blockfrost_mainnet.get_assets_of_policy(invalid_policy_id)
-            expect(response[:status]).to eq(404)
+            expect(response[:status]).to eq(400)
             expect(response[:body]).to include(:error)
           end
         end
         context 'with params' do
-          it 'returns status 404, response body includes error' do
+          it 'returns status 400, response body includes error' do
             response = blockfrost_mainnet.get_assets_of_policy(invalid_policy_id, { count: 7, page: 3 })
-            expect(response[:status]).to eq(404)
+            expect(response[:status]).to eq(400)
             expect(response[:body]).to include(:error)
           end
         end

@@ -17,7 +17,7 @@ module Request
     # @param project_id [String] the project_id to pass to url in headers.
     # @param params [Hash] params to add to request, allowed :order, :page, :count, :from, :to.
     # @return [Hash] formatted result with status and body keys.
-    def get_response(url, project_id, params = {})
+    def get_response(url, project_id = nil, params = {})
       params[:from_page] ? get_pages_multi(url, project_id, params) : get_response_from_url(url, project_id, params)
     end
 
