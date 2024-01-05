@@ -32,6 +32,28 @@ RSpec.describe AddressesEndpoints do
         end
       end
 
+      context 'when calls get_extended_address_info method' do
+        context 'with valid address' do
+          it 'returns status 200, response body includes address, amount, stake_address, type, script' do
+            response = blockfrost_mainnet.get_extended_address_info(valid_address)
+            expect(response[:status]).to eq(200)
+            expect(response[:body]).to include(address: valid_address)
+            expect(response[:body]).to include(:amount)
+            expect(response[:body]).to include(:stake_address)
+            expect(response[:body]).to include(:type)
+            expect(response[:body]).to include(:script)
+          end
+        end
+
+        context 'with invalid address' do
+          it 'returns status 400, response body includes error' do
+            response = blockfrost_mainnet.get_extended_address_info(invalid_address)
+            expect(response[:status]).to eq(400)
+            expect(response[:body]).to include(:error)
+          end
+        end
+      end
+
       context 'when calls get_address_details method' do
         context 'with valid address' do
           it 'returns status 200, response body includes address' do
