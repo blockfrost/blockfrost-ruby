@@ -1,0 +1,29 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  RSpec:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby:
+          - "3.0"
+          - "3.1"
+          - "3.2"
+          - "3.3"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Run rspec
+        env:
+          BF_MAINNET_PROJECT_ID: ${{ secrets.BF_MAINNET_PROJECT_ID }}
+          BF_TESTNET_PROJECT_ID: ${{ secrets.BF_PREVIEW_PROJECT_ID }}
+          BF_IPFS_PROJECT_ID: ${{ secrets.BF_IPFS_PROJECT_ID }}
+        run: |
+          echo "BF_MAINNET_PROJECT_ID : $BF_MAINNET_PROJECT_ID"
